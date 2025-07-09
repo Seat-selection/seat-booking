@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>电影院选票</title>
+</head>
+
+<body>
+    <div id="selected-tickets">
+        <div id="text">
+            您已选中座位如下：
+        </div>
+        <div id="selected">
+            <div id="ticket">
+                <div id="username">
+                </div>
+                <div id="seat">
+                </div>
+            </div>
+            <div id="ticket">
+            </div>
+            <div id="ticket">
+            </div>
+            <div id="ticket">
+            </div>
+            <div id="ticket">
+            </div>
+            <div id="ticket">
+            </div>
+            <div id="ticket">
+            </div>
+            <div id="ticket">
+            </div>
+        </div>
+        <div id="buy">
+            <div id="reserve">
+            </div>
+            <div id="pay">
+            </div>
+        </div>
+    </div>
+</body>
+
+<style>
+    body {
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+    }
+    #selected-tickets {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 800px;
+        width: 1200px;
+        background-color: rgba(37, 12, 147, 0.3);;
+    }
+    #text {
+        position: relative;
+        height: 70px;
+        width: 300px;
+        top: 50px;
+        left: 40%;
+        background-color: rgba(179, 238, 16, 0.3);;
+        display: flex;    
+        justify-content: center; 
+        align-items: center;  
+        font-family: Arial, sans-serif; 
+        font-size: 25px;        
+        font-weight: bold;
+    }
+    #selected, #buy {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        left: 50px;
+        width: 1100px;
+        background-color: rgba(29, 219, 102, 0.3);
+    }
+    #selected {
+        top: 70px;
+        height: 400px;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-content: flex-start;
+        padding-top: 20px;
+        padding-right: 20px;
+        row-gap: 20px;
+    }
+    #buy {
+        top: 120px;
+        height: 150px;
+        justify-content: center; 
+        align-items: center;
+        gap: 100px;
+    }
+    #reserve, #pay {
+        position: relative;
+        height: 50px;
+        width: 160px;
+        background-color: rgba(13, 38, 84, 0.3);
+        display: flex;    
+    }
+    #ticket {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        height: 90px;
+        width: 200px;
+        margin-left: 20px;
+        background-color: rgba(37, 12, 147, 0.3);;
+    }
+    #username, #seat {
+        position: relative;
+        height: 35px;
+        width: 160px;
+        background-color: rgba(13, 38, 84, 0.3);
+        display: flex;    
+    }
+    #selected-tickets::before, #selected::before, #buy::before, #reserve::before, #pay::before,  
+    #ticket::before, #username::before, #seat::before {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 12px;
+        color: #000000;
+        font-family: monospace;
+    }
+    #selected-tickets::before {
+        content: "已选票信息 id=\"selected-tickets\"";
+    }
+    #selected::before {
+        content: "已选票 id=\"selected\"";
+    }
+    #buy::before {
+        content: "id=\"buy\"";
+    }
+    #reserve::before {
+        content: "预订 id=\"reserve\"";
+    }
+    #pay::before {
+        content: "支付 id=\"pay\"";
+    }
+    #ticket::before {
+        content: "票信息 id=\"ticket\"";
+    }
+    #username::before {
+        content: "姓名 id=\"username\"";
+    }
+    #seat::before {
+        content: "座位号 id=\"seat\"";
+    }
+</style>
