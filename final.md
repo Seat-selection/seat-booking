@@ -1,0 +1,1 @@
+点击id="finished-button"按钮会触发对应的‘click’事件，回到index.html
