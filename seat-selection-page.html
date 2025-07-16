@@ -7,13 +7,104 @@
 
 <body>
     <div id="seat-selection">
-        <div id="seat-map">
-        </div>
+        <canvas id="seat-map">
+        </canvas>
+        <script>
+            const canvas = document.getElementById("seat-map");
+            canvas.width = 1000;  // 绘图区域宽度（像素）
+            canvas.height = 700;
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height - 100;
+            console.log(centerX, centerY);
+            
+            console.log(canvas.width, canvas.height)
+            
+            
+            const cinemaConfig = {
+                small: { rows: 5, cols: 20, baseRadius: 300, rowSpacing: 40 },
+                medium: { rows: 10, cols: 20, baseRadius: 200, rowSpacing: 35 },
+                large: { rows: 10, cols: 30, baseRadius: 255, rowSpacing: 30 }
+            };
+
+            // 当前使用的配置
+            let currentConfig = cinemaConfig.medium;
+            let rowSpacing = currentConfig.rowSpacing;
+            let ROWS = currentConfig.rows;
+            let COLS = currentConfig.cols;
+            let baseRadius = currentConfig.baseRadius;
+
+            function getSeatPosition(row, col) {
+                console.log("draw",row, col);
+                const radius = baseRadius + row * rowSpacing;
+                const angleStep = Math.PI / 1.5 / (COLS - 1);
+                const angle = Math.PI - ((Math.PI - angleStep * (COLS - 1)) / 2 + col * angleStep);
+                // console.log(radius, angle / Math.PI * 180, angleStep / Math.PI * 180, col * angleStep / Math.PI * 180);
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY - radius * Math.sin(angle);
+                // const y = 100;
+                return {x, y};
+            }
+            function changeSeatState(row, col, state) {
+                // 绘制座位
+                const { x, y } = getSeatPosition(row, col);
+                console.log(x, y);
+                ctx.beginPath();
+                ctx.arc(x, y, 7, 0, Math.PI * 2);
+                ctx.fillStyle = state;
+                ctx.fill();
+            }
+            function drawColumnLabels() {
+                ctx.font = '14px Arial';
+                ctx.fillStyle = 'black';
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                for (var i = 0; i < COLS; i++) {
+                    const {x, y} = getSeatPosition(ROWS, i);
+                    ctx.fillText((i + 1).toString(), x, y);
+                }
+            }
+            function drawRowLabels() {
+                ctx.font = '14px Arial';
+                ctx.fillStyle = 'black';
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                for (var i = 0; i < ROWS; i++) {
+                    const {x, y} = getSeatPosition(i, -1);
+                    ctx.fillText((i + 1).toString(), x, y);
+                }
+            }
+            function render() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 6, 0, Math.PI * 2);
+                // ctx.arc(100, 100, 6, 0, Math.PI * 2);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+                for (var i = 0; i < ROWS; i++) {
+                    for (var j = 0; j < COLS; j++) {
+                        changeSeatState(i, j, 'yellow');
+                    }
+                }
+                changeSeatState(0, 0, 'yellow');
+                drawColumnLabels();
+                drawRowLabels();
+                // changeSeatState(0, 0, 'yellow'); 
+                // changeSeatState(0, 29, 'yellow'); 
+            }
+            render();
+        </script>
         <div id="option">
-            <div id="manual">
-            </div>
-            <div id="auto">
-            </div>
+            <!-- <div id="manual">
+            </div> -->
+            <!-- <button id="manual" >
+                手动选票
+            </button> -->
+            <!-- <div id="auto">
+            </div> -->
+            <button id="auto">
+                自动选票
+            </button>
         </div>
         <div id="check">
             <div id="check-button">
@@ -59,8 +150,8 @@
         justify-content: center;
         justify-content: space-around;
         align-items: center;
-        height: 800px;
-        width: 800px;
+        height: 850px;
+        width: 1000px;
         background-color: rgba(37, 12, 147, 0.3);
     }
     #people {
@@ -74,18 +165,18 @@
         background-color: rgba(37, 12, 147, 0.3);
     }
     #seat-map {
-        position: relative;
-        height: 480px;
-        width: 700px;
-        background-color: rgba(179, 238, 16, 0.3);
+        /* position: relative; */
+        height: 700px;
+        width: 1000px;
+        /* background-color: rgba(179, 238, 16, 0.3); */
     }
     #option {
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 70px;
-        height: 100px;
+        /* gap: 70px; */
+        height: 70px;
         width: 700px;
         background-color: rgba(16, 200, 65, 0.3);
     }
@@ -94,16 +185,52 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100px;
+        height: 70px;
         width: 700px;
         background-color: rgba(16, 200, 65, 0.3);
     }
-    #manual, #auto, #check-button, #addition-button, #done-button {
+    #auto, #check-button, #addition-button, #done-button {
+        border: none; 
+        outline: none;
         position: relative;
-        height: 50px;
-        width: 120px;
+        height: 60px;
+        width: 180px;
+        border-radius: 8px;
         background-color: rgba(13, 38, 84, 0.3);
     }
+    #auto:hover, #check-button:hover, #addition-button:hover, #done-button:hover {
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+    }
+    #auto:active, #check-button:active, #addition-button:active, #done-button:active {
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        transform: translateY(1px);
+    }
+    #auto {
+        background-color: #3498db;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    #auto:hover {
+        background-color: #2980b9; /* 悬停时加深颜色 */
+    }
+    #auto:active {
+        background-color: #2070a0; /* 点击时进一步加深 */
+    }
+
+    #check-button {
+        background-color: #3498db;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    #check-button:hover {
+        background-color: #2980b9; /* 悬停时加深颜色 */
+    }
+    #check-button:active {
+        background-color: #2070a0; /* 点击时进一步加深 */
+    }
+
+
     #addition, #done {
         position: relative;
         display: flex;
@@ -152,12 +279,12 @@
     #option::before {
         content: "自动或手动选座选项 id=\"option\"";
     }
-    #manual::before {
+    /* #manual::before {
         content: "手动选座按钮 id=\"manual\"";
     }
     #auto::before {
         content: "自动选座按钮 id=\"auto\"";
-    }
+    } */
     #check::before {
         content: "id=\"check\"";
     }
