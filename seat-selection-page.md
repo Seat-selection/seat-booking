@@ -18,6 +18,8 @@ getSeatColor(row,col)要求获取第row行第col列的状态（要求返回颜�
 
 点击id="addition-button"按钮会触发对应的‘click’事件（跳转到adding-viewer.html）
 
+点击id="delete-button"按钮会触发对应的‘click’事件（删除对应选中的观影人）
+
 点击id="done-button"按钮会触发对应的‘click’事件（跳转到payment.html）
 
 

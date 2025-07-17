@@ -29,7 +29,7 @@
             };
 
             // 当前使用的配置
-            let currentConfig = cinemaConfig.large;
+            let currentConfig = cinemaConfig.medium;
             let rowSpacing = currentConfig.rowSpacing;
             let ROWS = currentConfig.rows;
             let COLS = currentConfig.cols;
@@ -165,67 +165,89 @@
                 添加观影人
             </button>
         </div>
+        <div>
+            请点击已添加的观影人为其分配座位。
+        </div>
         <div id="audience-list">
-            <div id="audience">
+            <div class="audience">
                 观影人1
                 <p>
                     已选：X排X列
                 </p>
             </div>
-            <div id="audience">
+            <div class="audience">
                 观影人2
                 <p>
                     已选：X排X列
                 </p>
             </div>
-            <div id="audience">
+            <div class="audience">
                 观影人3
                 <p>
                     已选：X排X列
                 </p>
             </div>
-            <div id="audience">
+            <div class="audience">
                 观影人4
                 <p>
                     已选：X排X列
                 </p>
             </div>
-            <div id="audience">
+            <div class="audience">
                 观影人5
                 <p>
                     已选：X排X列
                 </p>
             </div>
-            <div id="audience">
+            <div class="audience">
                 观影人6
                 <p>
                     已选：X排X列
                 </p>
             </div>
-            <div id="audience">
+            <div class="audience">
                 观影人7
                 <p>
                     已选：X排X列
                 </p>
             </div>
-            <div id="audience">
+            <div class="audience">
                 观影人8
                 <p>
                     已选：X排X列
                 </p>
             </div>
-            <div id="audience">
+            <div class="audience">
                 观影人9
                 <p>
                     已选：X排X列
                 </p>
             </div>
-            <div id="audience">
+            <div class="audience">
                 观影人10
                 <p>
                     已选：X排X列
                 </p>
             </div>
+            <script>
+                const audiences = document.querySelectorAll('.audience');
+                audiences.forEach(audience => {
+                    audience.addEventListener('click', function () {
+                        if (this.classList.contains('selected')) {
+                            // 如果已经选中，点击后移除选中状态
+                            this.classList.remove('selected');
+                        } else {
+                            // 如果未选中，点击后添加选中状态
+                            this.classList.add('selected');
+                        }
+                    });
+                });
+            </script>
+        </div>
+        <div id="delete">
+            <button id="delete-button">
+                删除观影人
+            </button>
         </div>
         <div id="done">
             <button id="done-button">
@@ -242,15 +264,17 @@
         justify-content: center;
         align-items: center;
         gap: 40px; 
-        color: #ffffff; /* 纯白色文字 */
-        text-shadow: 0 0 1px rgba(0, 0, 0, 0.5); /* 极淡阴影模拟描边 */
+        color: #ffffff; 
+        font-family: 'SimSun', 'Songti SC', 'Microsoft YaHei', sans-serif;
+        font-size: 18px;
+        text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
     }
     body {
-        background-image: url('background.avif');  /* 指定AVIF格式背景图 */
-        background-size: cover;                   /* 覆盖整个页面 */
-        background-position: center;              /* 居中显示 */
-        background-repeat: no-repeat;             /* 不重复 */
-        background-attachment: fixed;             /* 固定背景，滚动时不移动 */
+        background-image: url('background.avif');  
+        background-size: cover;              
+        background-position: center;        
+        background-repeat: no-repeat;       
+        background-attachment: fixed;   
     }
     #seat-selection {
         position: relative;
@@ -269,7 +293,7 @@
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
-        height: 800px;
+        height: 850px;
         width: 400px;
         /* background-color: rgba(37, 12, 147, 0.3); */
     }
@@ -284,6 +308,7 @@
 
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 
                     0 0 0 1px rgba(0, 0, 0, 0.1);     
+        cursor: pointer;
     }
     #option {
         position: relative;
@@ -304,7 +329,7 @@
         width: 700px;
         /* background-color: rgba(16, 200, 65, 0.3); */
     }
-    #auto, #check-button, #addition-button, #done-button {
+    #auto, #check-button, #addition-button, #done-button, #delete-button {
         border: none; 
         outline: none;
         position: relative;
@@ -315,12 +340,13 @@
         background-color: rgba(13, 38, 84, 0.3);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
+        cursor: pointer;
     }
-    #auto:hover, #check-button:hover, #addition-button:hover, #done-button:hover {
+    #auto:hover, #check-button:hover, #addition-button:hover, #done-button:hover, #delete-button:hover {
         box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         transform: translateY(-2px);
     }
-    #auto:active, #check-button:active, #addition-button:active, #done-button:active {
+    #auto:active, #check-button:active, #addition-button:active, #done-button:active, #delete-button:active {
         box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         transform: translateY(1px);
     }
@@ -365,8 +391,18 @@
         background-color: rgba(46, 125, 50, 1.0);
     }
 
+    #delete-button {
+        background-color: rgba(180, 99, 219, 0.8);
+    }
+    #delete-button:hover {
+        background-color: rgba(160, 80, 199, 0.9);
+    }
+    #delete-button:active {
+        background-color: rgba(140, 60, 179, 1.0);
+    }
 
-    #addition, #done {
+
+    #addition, #done, #delete {
         position: relative;
         display: flex;
         justify-content: center;
@@ -374,6 +410,9 @@
         height: 100px;
         width: 320px;
         /* background-color: rgba(179, 238, 16, 0.3); */
+    }
+    #done, #delete {
+        height: 70px;
     }
     #audience-list {
         position: relative;
@@ -404,9 +443,9 @@
         border-radius: 3px;
     }
     #audience-list::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.5); /* 悬停时更明显 */
+        background: rgba(255, 255, 255, 0.5); 
     }
-    #audience {
+    .audience {
         font-family: "PingFang SC", "Microsoft YaHei", "Heiti SC", sans-serif;
         position: relative;
         height: 50px;
@@ -418,15 +457,20 @@
         gap: 0px;
 
         display: flex;
-        flex-direction: column;     /* 垂直排列子元素 */
-        justify-content: center;    /* 垂直居中 */
-        align-items: center;        /* 水平居中 */
-        text-align: center;         /* 文本居中（针对多行文本） */
+        flex-direction: column;   
+        justify-content: center;  
+        align-items: center;      
+        text-align: center;       
+        cursor: pointer;
     }
 
-    #audience p {
+    .audience p {
         margin: 0;
         font-weight: bold;
+    }
+
+    .audience.selected {
+        background-color: rgba(255, 0, 0, 0.7);
     }
 
     #seat-selection::before, #people::before, #seat-map::before, #option::before, #manual::before, #auto::before, #check::before, 

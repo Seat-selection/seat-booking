@@ -37,6 +37,10 @@
             <div id="audience">
             </div>
         </div>
+        <div id="delete">
+            <div id="delete-button">
+            </div>
+        </div>
         <div id="done">
             <div id="done-button">
             </div>
@@ -69,7 +73,7 @@
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
-        height: 800px;
+        height: 850px;
         width: 400px;
         background-color: rgba(37, 12, 147, 0.3);
     }
@@ -98,13 +102,13 @@
         width: 700px;
         background-color: rgba(16, 200, 65, 0.3);
     }
-    #manual, #auto, #check-button, #addition-button, #done-button {
+    #manual, #auto, #check-button, #addition-button, #done-button, #delete-button {
         position: relative;
         height: 50px;
         width: 120px;
         background-color: rgba(13, 38, 84, 0.3);
     }
-    #addition, #done {
+    #addition, #done, #delete {
         position: relative;
         display: flex;
         justify-content: center;
@@ -132,7 +136,7 @@
     }
     #seat-selection::before, #people::before, #seat-map::before, #option::before, #manual::before, #auto::before, #check::before, 
     #check-button::before, #addition::before, #addition-button::before, #audience-list::before, #audience::before,
-    #done::before, #done-button::before {
+    #done::before, #done-button::before, #delete::before, #delete-button::before {
         position: absolute;
         top: 10px;
         left: 10px;
@@ -176,8 +180,14 @@
     #audience::before {
         content: "观影人 id=\"audience\"";
     }
+    #delete::before {
+        content: "id=\"delete\"";
+    }
     #done::before {
         content: "id=\"done\"";
+    }
+    #delete-button::before {
+        content: "\"删除观影人\"按钮 id=\"delete-button\"";
     }
     #done-button::before {
         content: "\"我选好了\"按钮 id=\"done-button\"";

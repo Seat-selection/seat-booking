@@ -6,16 +6,38 @@
 </head>
 
 <body>
-    <div id="adding-viewer">
-        <div id="name">
+    <form id="adding-viewer">
+        <!-- <div id="name">
+        </div> -->
+        <div>
+            添加观影人
         </div>
-        <div id="age">
-        </div>
-        <div id="adding">
-            <div id="adding-button">
+        <div class="form-group">
+            <div for="username">
+                <span for="name-div">
+                    姓名：
+                </span>
+                <input type="text" id="name" placeholder="请输入姓名">
             </div>
         </div>
-    </div>
+        <div class="form-group">
+            <div for="age">
+                <span for="age-div">
+                    年龄：
+                </span>
+                <input type="text" id="age" placeholder="请输入年龄">
+            </div>
+        </div>
+        <div id="adding">
+            <!-- <button id="adding-button">
+                添加
+            </button> -->
+            <input type="submit" value="添加" id="adding-button">
+        </div>
+        <button id="return-button">
+            返回
+        </button>
+    </form>
 </body>
     
 <style>
@@ -24,37 +46,124 @@
         height: 100vh;
         justify-content: center;
         align-items: center;
+        gap: 40px; 
+        font-family: 'SimSun', 'Songti SC', 'Microsoft YaHei', sans-serif;
+        font-size: 18px;
+        text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+    }
+    body {
+        background-image: url('background.avif');  
+        background-size: cover;              
+        background-position: center;        
+        background-repeat: no-repeat;       
+        background-attachment: fixed;   
     }
     #adding-viewer {
         position: relative;
         display: flex;
         flex-direction: column;
-        height: 600px;
-        width: 1000px;
-        background-color: rgba(37, 12, 147, 0.3);;
+        justify-content: center;
+        height: 450px;
+        width: 600px;
+        background-color: rgba(255, 255, 255, 0.8);
+
+        border: 2px solid #ffffff; 
+        border-radius: 8px;       
+
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 
+                    0 0 0 1px rgba(0, 0, 0, 0.1);     
         justify-content: center; 
         align-items: center; 
-        gap: 40px;          
+        gap: 25px;          
     }
     
-    #name, #age, #adding {
+    .form-group {
+        display: flex;
         position: relative;
-        height: 120px;
+        justify-content: center;
+        align-items: center;
+        height: 60px;
         width: 600px;
-        background-color: rgba(179, 238, 16, 0.3);;
+    }
+    div[for="username"], div[for="age"] {
+        width: 360px;
+    }
+
+    #name, #age {
+        font-family: 'SimSun', 'Songti SC', 'Microsoft YaHei', sans-serif;
+        font-size: 18px;
+    }
+
+    
+    span[for="name-div"], span[for="age-div"] {
+        /* vertical-align: top; */
+        /* display: inline-block; */
+        margin-bottom: 5px;
+        font-family: 'SimSun', 'Songti SC', 'Microsoft YaHei', sans-serif; 
+        font-weight: 1000;
+        color: #000000;
+        background-color: inherit;
+        height: 40px;
+        width: 80px;
+        font-size: 18px;
+    }
+    input[type="text"],
+    input[type="password"] {
+        /* vertical-align: top; */
+        /* display: inline-block; */
+        width: 250px;
+        height: 60px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
     }
     #adding {
         display: flex;
         justify-content: center; 
         align-items: center; 
     }
-    #adding-button {
+    #adding-button, #return-button {
+        border: none; 
+        outline: none;
         position: relative;
         height: 60px;
-        width: 160px;
+        width: 180px;
+        border-radius: 8px;
+        font-size: 16px;
         background-color: rgba(13, 38, 84, 0.3);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
     }
-    #adding-viewer::before, #name::before, #age::before, #adding::before, #adding-button::before {
+    #adding-button:hover, #return-button:hover {
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+    }
+    #adding-button:active, #return-button:active {
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        transform: translateY(1px);
+    }
+    #adding-button {
+        background-color: rgba(255, 215, 0, 0.8);
+    }
+    #adding-button:hover {
+        background-color: rgba(255, 193, 7, 0.9);
+    }
+    #adding-button:active {
+        background-color: rgba(255, 160, 0, 1.0);
+    }
+
+    #return-button {
+        background-color: rgba(169, 169, 169, 0.8); 
+    }
+    #return-button:hover {
+        background-color: rgba(140, 140, 140, 0.9);
+    }
+    #return-button:active {
+        background-color: rgba(110, 110, 110, 1.0); 
+    }
+    /* #adding-viewer::before, #name::before, #age::before, #adding::before, #adding-button::before {
         position: absolute;
         top: 10px;
         left: 10px;
@@ -76,5 +185,5 @@
     }
     #adding-button::before {
         content: "添加按钮 id=\"adding-button\"";
-    }
+    } */
 </style>
