@@ -10,8 +10,6 @@
         <div id="seat-map">
         </div>
         <div id="option">
-            <div id="manual">
-            </div>
             <div id="auto">
             </div>
         </div>
@@ -102,7 +100,7 @@
         width: 700px;
         background-color: rgba(16, 200, 65, 0.3);
     }
-    #manual, #auto, #check-button, #addition-button, #done-button, #delete-button {
+    #auto, #check-button, #addition-button, #done-button, #delete-button {
         position: relative;
         height: 50px;
         width: 120px;
@@ -134,7 +132,7 @@
         width: 280px;
         background-color: rgba(13, 38, 84, 0.3);
     }
-    #seat-selection::before, #people::before, #seat-map::before, #option::before, #manual::before, #auto::before, #check::before, 
+    #seat-selection::before, #people::before, #seat-map::before, #option::before, #auto::before, #check::before, 
     #check-button::before, #addition::before, #addition-button::before, #audience-list::before, #audience::before,
     #done::before, #done-button::before, #delete::before, #delete-button::before {
         position: absolute;
@@ -156,9 +154,6 @@
     #option::before {
         content: "自动或手动选座选项 id=\"option\"";
     }
-    #manual::before {
-        content: "手动选座按钮 id=\"manual\"";
-    }
     #auto::before {
         content: "自动选座按钮 id=\"auto\"";
     }
@@ -178,7 +173,7 @@
         content: "观影人列表 id=\"audience-list\"";
     }
     #audience::before {
-        content: "观影人 id=\"audience\"";
+        content: "观影人 class=\"audience\"";
     }
     #delete::before {
         content: "id=\"delete\"";

@@ -36,6 +36,7 @@
             let baseRadius = currentConfig.baseRadius;
             let seatRadius = 7;
 
+            // 获得位置在canvas上的坐标
             function getSeatPosition(row, col) {
                 // console.log("draw",row, col);
                 const radius = baseRadius + row * rowSpacing;
@@ -47,6 +48,7 @@
                 // const y = 100;
                 return {x, y};
             }
+            // 改变位置状态
             function changeSeatState(row, col, state) {
                 // 绘制座位
                 const { x, y } = getSeatPosition(row, col);
@@ -56,6 +58,7 @@
                 ctx.fillStyle = state;
                 ctx.fill();
             }
+            // 绘制列标号
             function drawColumnLabels() {
                 ctx.font = '14px Arial';
                 ctx.fillStyle = 'black';
@@ -66,6 +69,7 @@
                     ctx.fillText((i + 1).toString(), x, y);
                 }
             }
+            // 绘制行标号
             function drawRowLabels() {
                 ctx.font = '14px Arial';
                 ctx.fillStyle = 'black';
@@ -76,6 +80,7 @@
                     ctx.fillText((i + 1).toString(), x, y);
                 }
             }
+            // 绘图
             function render() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 // ctx.beginPath();
@@ -114,11 +119,13 @@
                 // changeSeatState(0, 0, 'yellow'); 
                 // changeSeatState(0, 29, 'yellow'); 
             }
+            // 修改handleSeatSelection来处理选位操作
             function handleSeatSelection(row, col, ctrlKey) {
                 console.log("handleSeatSelection", row, col);
                 changeSeatState(row, col, "yellow");
             }
             render();
+            // 监听选位操作
             canvas.addEventListener('click', function(event) {
                 const rect = canvas.getBoundingClientRect();
                 const x = event.clientX - rect.left;
@@ -229,6 +236,7 @@
                     已选：X排X列
                 </p>
             </div>
+            <!-- 在这里编写观影人被选中的相关逻辑 -->
             <script>
                 const audiences = document.querySelectorAll('.audience');
                 audiences.forEach(audience => {
