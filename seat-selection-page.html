@@ -16,9 +16,10 @@
             const ctx = canvas.getContext('2d');
             const centerX = canvas.width / 2;
             const centerY = canvas.height - 100;
-            console.log(centerX, centerY);
+            // console.log(centerX, centerY);
             
-            console.log(canvas.width, canvas.height)
+            // console.log(canvas.width, canvas.height)
+            
             
             
             const cinemaConfig = {
@@ -28,14 +29,15 @@
             };
 
             // 当前使用的配置
-            let currentConfig = cinemaConfig.medium;
+            let currentConfig = cinemaConfig.large;
             let rowSpacing = currentConfig.rowSpacing;
             let ROWS = currentConfig.rows;
             let COLS = currentConfig.cols;
             let baseRadius = currentConfig.baseRadius;
+            let seatRadius = 7;
 
             function getSeatPosition(row, col) {
-                console.log("draw",row, col);
+                // console.log("draw",row, col);
                 const radius = baseRadius + row * rowSpacing;
                 const angleStep = Math.PI / 1.5 / (COLS - 1);
                 const angle = Math.PI - ((Math.PI - angleStep * (COLS - 1)) / 2 + col * angleStep);
@@ -48,9 +50,9 @@
             function changeSeatState(row, col, state) {
                 // 绘制座位
                 const { x, y } = getSeatPosition(row, col);
-                console.log(x, y);
+                // console.log(x, y);
                 ctx.beginPath();
-                ctx.arc(x, y, 7, 0, Math.PI * 2);
+                ctx.arc(x, y, seatRadius, 0, Math.PI * 2);
                 ctx.fillStyle = state;
                 ctx.fill();
             }
@@ -76,23 +78,68 @@
             }
             function render() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, 6, 0, Math.PI * 2);
-                // ctx.arc(100, 100, 6, 0, Math.PI * 2);
-                ctx.fillStyle = 'red';
-                ctx.fill();
+                // ctx.beginPath();
+                // ctx.arc(centerX, centerY, 6, 0, Math.PI * 2);
+                // // ctx.arc(100, 100, 6, 0, Math.PI * 2);
+                // ctx.fillStyle = 'red';
+                // ctx.fill();
+                // 设置字体样式
+                // 第一行文字：银屏中央（大字体、金色描边）
+                ctx.font = '32px "PingFang SC", sans-serif';
+                ctx.fillStyle = 'rgba(255, 215, 0, 0.8)'; // 金色填充
+                ctx.strokeStyle = 'rgba(184, 134, 11, 0.9)'; // 深金色描边
+                ctx.lineWidth = 2;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                // 同时绘制填充和描边，形成立体效果
+                ctx.fillText('银屏中央', canvas.width / 2, canvas.height - 120);
+                ctx.strokeText('银屏中央', canvas.width / 2, canvas.height - 120);
+
+                // 第二行文字：请点击座位选座（小字体、蓝色填充）
+                ctx.font = 'bold 18px "PingFang SC", "Microsoft YaHei", sans-serif'; // 加粗字体
+                ctx.fillStyle = '#2c3e50';  // 深蓝色填充
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)'; // 白色细描边（增强可读性）
+                ctx.lineWidth = 1;
+
+                ctx.fillText('请点击座位选座', canvas.width / 2, canvas.height - 60);
                 for (var i = 0; i < ROWS; i++) {
                     for (var j = 0; j < COLS; j++) {
-                        changeSeatState(i, j, 'yellow');
+                        changeSeatState(i, j, 'green');
                     }
                 }
-                changeSeatState(0, 0, 'yellow');
+                // changeSeatState(0, 0, 'green');
                 drawColumnLabels();
                 drawRowLabels();
                 // changeSeatState(0, 0, 'yellow'); 
                 // changeSeatState(0, 29, 'yellow'); 
             }
+            function handleSeatSelection(row, col, ctrlKey) {
+                console.log("handleSeatSelection", row, col);
+                changeSeatState(row, col, "yellow");
+            }
             render();
+            canvas.addEventListener('click', function(event) {
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+                console.log("clicked!", x, y);
+                console.log(getSeatPosition(0, 0));
+                for (let i = 0; i < ROWS; i++) {
+                    for (let j = 0; j < COLS; j++) {
+                        const {x: seatX, y: seatY} = getSeatPosition(i, j);
+                        if (i == 0 && j == 0) {
+                            console.log(seatX, seatY, seatRadius);
+                            console.log(getSeatPosition(i, j));
+                            console.log(Math.sqrt((x - seatX) ** 2 + (y - seatY) ** 2), seatRadius)
+                        }
+                        if (Math.sqrt((x - seatX) ** 2 + (y - seatY) ** 2) < seatRadius) {
+                            handleSeatSelection(i, j, event.ctrlKey);
+                            break;
+                        }
+                    }
+                }
+            })
         </script>
         <div id="option">
             <!-- <div id="manual">
@@ -103,34 +150,87 @@
             <!-- <div id="auto">
             </div> -->
             <button id="auto">
-                自动选票
+                自动选座
             </button>
         </div>
         <div id="check">
-            <div id="check-button">
-            </div>
+            <button id="check-button">
+                查看我的购票
+            </button>
         </div>
     </div>
     <div id="people">
         <div id="addition">
-            <div id="addition-button">
-            </div>
+            <button id="addition-button">
+                添加观影人
+            </button>
         </div>
         <div id="audience-list">
             <div id="audience">
+                观影人1
+                <p>
+                    已选：X排X列
+                </p>
             </div>
             <div id="audience">
+                观影人2
+                <p>
+                    已选：X排X列
+                </p>
             </div>
             <div id="audience">
+                观影人3
+                <p>
+                    已选：X排X列
+                </p>
             </div>
             <div id="audience">
+                观影人4
+                <p>
+                    已选：X排X列
+                </p>
             </div>
             <div id="audience">
+                观影人5
+                <p>
+                    已选：X排X列
+                </p>
+            </div>
+            <div id="audience">
+                观影人6
+                <p>
+                    已选：X排X列
+                </p>
+            </div>
+            <div id="audience">
+                观影人7
+                <p>
+                    已选：X排X列
+                </p>
+            </div>
+            <div id="audience">
+                观影人8
+                <p>
+                    已选：X排X列
+                </p>
+            </div>
+            <div id="audience">
+                观影人9
+                <p>
+                    已选：X排X列
+                </p>
+            </div>
+            <div id="audience">
+                观影人10
+                <p>
+                    已选：X排X列
+                </p>
             </div>
         </div>
         <div id="done">
-            <div id="done-button">
-            </div>
+            <button id="done-button">
+                我选好了！
+            </button>
         </div>
     </div>
 </body>
@@ -142,6 +242,15 @@
         justify-content: center;
         align-items: center;
         gap: 40px; 
+        color: #ffffff; /* 纯白色文字 */
+        text-shadow: 0 0 1px rgba(0, 0, 0, 0.5); /* 极淡阴影模拟描边 */
+    }
+    body {
+        background-image: url('background.avif');  /* 指定AVIF格式背景图 */
+        background-size: cover;                   /* 覆盖整个页面 */
+        background-position: center;              /* 居中显示 */
+        background-repeat: no-repeat;             /* 不重复 */
+        background-attachment: fixed;             /* 固定背景，滚动时不移动 */
     }
     #seat-selection {
         position: relative;
@@ -152,7 +261,7 @@
         align-items: center;
         height: 850px;
         width: 1000px;
-        background-color: rgba(37, 12, 147, 0.3);
+        /* background-color: rgba(37, 12, 147, 0.3); */
     }
     #people {
         position: relative;
@@ -162,13 +271,18 @@
         align-items: center;
         height: 800px;
         width: 400px;
-        background-color: rgba(37, 12, 147, 0.3);
+        /* background-color: rgba(37, 12, 147, 0.3); */
     }
     #seat-map {
-        /* position: relative; */
         height: 700px;
         width: 1000px;
-        /* background-color: rgba(179, 238, 16, 0.3); */
+        background-color: #FFFFFF;
+
+        border: 2px solid #ffffff; 
+        border-radius: 8px;       
+
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 
+                    0 0 0 1px rgba(0, 0, 0, 0.1);     
     }
     #option {
         position: relative;
@@ -178,7 +292,7 @@
         /* gap: 70px; */
         height: 70px;
         width: 700px;
-        background-color: rgba(16, 200, 65, 0.3);
+        /* background-color: rgba(16, 200, 65, 0.3); */
     }
     #check {
         position: relative;
@@ -187,7 +301,7 @@
         align-items: center;
         height: 70px;
         width: 700px;
-        background-color: rgba(16, 200, 65, 0.3);
+        /* background-color: rgba(16, 200, 65, 0.3); */
     }
     #auto, #check-button, #addition-button, #done-button {
         border: none; 
@@ -196,7 +310,10 @@
         height: 60px;
         width: 180px;
         border-radius: 8px;
+        font-size: 16px;
         background-color: rgba(13, 38, 84, 0.3);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
     }
     #auto:hover, #check-button:hover, #addition-button:hover, #done-button:hover {
         box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
@@ -206,28 +323,45 @@
         box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         transform: translateY(1px);
     }
+
     #auto {
-        background-color: #3498db;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
+        background-color: rgba(52, 152, 219, 0.8);
     }
     #auto:hover {
-        background-color: #2980b9; /* 悬停时加深颜色 */
+        background-color: rgba(41, 128, 185, 0.9);
     }
     #auto:active {
-        background-color: #2070a0; /* 点击时进一步加深 */
+        background-color: rgba(32, 112, 160, 1.0); 
     }
 
     #check-button {
-        background-color: #3498db;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
+        background-color: rgba(255, 127, 80, 0.8);
     }
     #check-button:hover {
-        background-color: #2980b9; /* 悬停时加深颜色 */
+        background-color: rgba(255, 99, 71, 0.9);
     }
     #check-button:active {
-        background-color: #2070a0; /* 点击时进一步加深 */
+        background-color: rgba(255, 69, 0, 1.0);
+    }
+
+    #addition-button {
+        background-color: rgba(255, 215, 0, 0.8);
+    }
+    #addition-button:hover {
+        background-color: rgba(255, 193, 7, 0.9);
+    }
+    #addition-button:active {
+        background-color: rgba(255, 160, 0, 1.0);
+    }
+
+    #done-button {
+        background-color: rgba(76, 175, 80, 0.8);
+    }
+    #done-button:hover {
+        background-color: rgba(67, 160, 71, 0.9);
+    }
+    #done-button:active {
+        background-color: rgba(46, 125, 50, 1.0);
     }
 
 
@@ -238,25 +372,62 @@
         align-items: center;
         height: 100px;
         width: 320px;
-        background-color: rgba(179, 238, 16, 0.3);
+        /* background-color: rgba(179, 238, 16, 0.3); */
     }
     #audience-list {
         position: relative;
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-content: flex-start;
+        padding: 20px;
         gap: 20px;
-        justify-content: center;
         align-items: center;
         height: 500px;
         width: 320px;
-        background-color: rgba(179, 238, 16, 0.3);
+        /* background-color: rgba(179, 238, 16, 0.3); */
+        overflow-y: auto;     
+        box-sizing: border-box;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 6px;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+    }
+    #audience-list::-webkit-scrollbar {
+        width: 6px;
+    }
+    #audience-list::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    #audience-list::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
+    }
+    #audience-list::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5); /* 悬停时更明显 */
     }
     #audience {
+        font-family: "PingFang SC", "Microsoft YaHei", "Heiti SC", sans-serif;
         position: relative;
         height: 50px;
         width: 280px;
-        background-color: rgba(13, 38, 84, 0.3);
+        background-color: rgba(5, 221, 250, 0.7);
+        /* border: 1px solid rgba(13, 38, 84, 0.5); */
+        border-radius: 4px;
+        box-sizing: border-box;
+        gap: 0px;
+
+        display: flex;
+        flex-direction: column;     /* 垂直排列子元素 */
+        justify-content: center;    /* 垂直居中 */
+        align-items: center;        /* 水平居中 */
+        text-align: center;         /* 文本居中（针对多行文本） */
     }
+
+    #audience p {
+        margin: 0;
+        font-weight: bold;
+    }
+
     #seat-selection::before, #people::before, #seat-map::before, #option::before, #manual::before, #auto::before, #check::before, 
     #check-button::before, #addition::before, #addition-button::before, #audience-list::before, #audience::before,
     #done::before, #done-button::before {
@@ -267,7 +438,7 @@
         color: #000000;
         font-family: monospace;
     }
-    #seat-selection::before {
+    /* #seat-selection::before {
         content: "选座模块 id=\"seat-selection\"";
     }
     #people::before {
@@ -278,20 +449,20 @@
     }
     #option::before {
         content: "自动或手动选座选项 id=\"option\"";
-    }
+    } */
     /* #manual::before {
         content: "手动选座按钮 id=\"manual\"";
     }
     #auto::before {
         content: "自动选座按钮 id=\"auto\"";
     } */
-    #check::before {
+    /* #check::before {
         content: "id=\"check\"";
-    }
-    #check-button::before {
+    } */
+    /* #check-button::before {
         content: "查看我的购票按钮 id=\"check-button\"";
-    }
-    #addition::before {
+    } */
+    /* #addition::before {
         content: "id=\"addition\"";
     }
     #addition-button::before {
@@ -308,5 +479,5 @@
     }
     #done-button::before {
         content: "\"我选好了\"按钮 id=\"done-button\"";
-    }
+    } */
 </style>

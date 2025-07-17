@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>电影院选票</title>
+</head>
+
+<body>
+    <div id="seat-selection">
+        <div id="seat-map">
+        </div>
+        <div id="option">
+            <div id="manual">
+            </div>
+            <div id="auto">
+            </div>
+        </div>
+        <div id="check">
+            <div id="check-button">
+            </div>
+        </div>
+    </div>
+    <div id="people">
+        <div id="addition">
+            <div id="addition-button">
+            </div>
+        </div>
+        <div id="audience-list">
+            <div id="audience">
+            </div>
+            <div id="audience">
+            </div>
+            <div id="audience">
+            </div>
+            <div id="audience">
+            </div>
+            <div id="audience">
+            </div>
+        </div>
+        <div id="done">
+            <div id="done-button">
+            </div>
+        </div>
+    </div>
+</body>
+
+<style>
+    body {
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        gap: 40px; 
+    }
+    #seat-selection {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        justify-content: space-around;
+        align-items: center;
+        height: 800px;
+        width: 800px;
+        background-color: rgba(37, 12, 147, 0.3);
+    }
+    #people {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        height: 800px;
+        width: 400px;
+        background-color: rgba(37, 12, 147, 0.3);
+    }
+    #seat-map {
+        position: relative;
+        height: 480px;
+        width: 700px;
+        background-color: rgba(179, 238, 16, 0.3);
+    }
+    #option {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 70px;
+        height: 100px;
+        width: 700px;
+        background-color: rgba(16, 200, 65, 0.3);
+    }
+    #check {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+        width: 700px;
+        background-color: rgba(16, 200, 65, 0.3);
+    }
+    #manual, #auto, #check-button, #addition-button, #done-button {
+        position: relative;
+        height: 50px;
+        width: 120px;
+        background-color: rgba(13, 38, 84, 0.3);
+    }
+    #addition, #done {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+        width: 320px;
+        background-color: rgba(179, 238, 16, 0.3);
+    }
+    #audience-list {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+        height: 500px;
+        width: 320px;
+        background-color: rgba(179, 238, 16, 0.3);
+    }
+    #audience {
+        position: relative;
+        height: 50px;
+        width: 280px;
+        background-color: rgba(13, 38, 84, 0.3);
+    }
+    #seat-selection::before, #people::before, #seat-map::before, #option::before, #manual::before, #auto::before, #check::before, 
+    #check-button::before, #addition::before, #addition-button::before, #audience-list::before, #audience::before,
+    #done::before, #done-button::before {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 12px;
+        color: #000000;
+        font-family: monospace;
+    }
+    #seat-selection::before {
+        content: "选座模块 id=\"seat-selection\"";
+    }
+    #people::before {
+        content: "购票人 id=\"people\"";
+    }
+    #seat-map::before {
+        content: "座位图 id=\"seat-map\"";
+    }
+    #option::before {
+        content: "自动或手动选座选项 id=\"option\"";
+    }
+    #manual::before {
+        content: "手动选座按钮 id=\"manual\"";
+    }
+    #auto::before {
+        content: "自动选座按钮 id=\"auto\"";
+    }
+    #check::before {
+        content: "id=\"check\"";
+    }
+    #check-button::before {
+        content: "查看我的购票按钮 id=\"check-button\"";
+    }
+    #addition::before {
+        content: "id=\"addition\"";
+    }
+    #addition-button::before {
+        content: "添加观影人按钮 id=\"addition-button\"";
+    }
+    #audience-list::before {
+        content: "观影人列表 id=\"audience-list\"";
+    }
+    #audience::before {
+        content: "观影人 id=\"audience\"";
+    }
+    #done::before {
+        content: "id=\"done\"";
+    }
+    #done-button::before {
+        content: "\"我选好了\"按钮 id=\"done-button\"";
+    }
+</style>
