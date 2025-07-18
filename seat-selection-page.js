@@ -29,11 +29,11 @@ function TestMode() {
     initializeSession();
     sessionStorage.setItem('hasInitialized', 'true');
 }
-
+let ctrlClickIndex = 0;
 let config;
 let selectedViewer = null; // 当前选中的观影人
 let seatStates = {}; // 座位状态 {row-col: 'green'|'yellow'|'red'}
-
+let lastSelectionType;
 document.addEventListener('DOMContentLoaded', function() {
     // 加载配置
     TestMode();
@@ -123,7 +123,58 @@ function handleSeatSelection(row, col, ctrlKey) {
     
     const seatKey = `${row}-${col}`;
     const currentState = seatStates[seatKey];
+    if(ctrlKey){
+        // CTRL模式：按点击顺序分配给观影人
+    if (config.viewers.length === 0) {
+        alert('请先添加观影人！');
+        return;
+    }
+
     
+    // 只要是不完全选择就置零
+    if (ctrlClickIndex ===0||lastSelectionType==='single') {
+        config.viewers.forEach(viewer => {
+            if (viewer.seatRow !== null && viewer.seatCol !== null) {
+                const oldKey = `${viewer.seatRow}-${viewer.seatCol}`;
+                seatStates[oldKey] = 'green';
+                changeSeatState(viewer.seatRow, viewer.seatCol, 'green');
+                viewer.seatRow = null;
+                viewer.seatCol = null;
+            }
+        });
+    }
+    
+
+    
+    const currentViewer = config.viewers[ctrlClickIndex];
+    
+    // 检查年龄限制
+    if (!checkAgeRestriction(currentViewer, row)) {
+        return; // 不增加索引，让用户重新选择
+    }
+    
+    // 分配座位给当前观影人
+    currentViewer.seatRow = row;
+    currentViewer.seatCol = col;
+    seatStates[seatKey] = 'yellow';
+    changeSeatState(row, col, 'yellow');
+    
+    // 移动到下一个观影人
+    ctrlClickIndex++;
+    
+    
+    lastSelectionType='ctrl'
+    saveConfig();
+    renderViewerList();
+    // 提示当前进度
+    if (ctrlClickIndex < config.viewers.length) {
+        console.log(`已为 ${currentViewer.name} 分配座位，请为 ${config.viewers[ctrlClickIndex].name} 选择座位`);
+    } else {
+        alert('所有观影人座位分配完成！');
+        ctrlClickIndex = 0; // 重置索引
+    }
+    }
+    else{
     // 如果座位已被占用，不能选择
     if (currentState === 'red') {
         alert('该座位已被占用！');
@@ -161,10 +212,10 @@ function handleSeatSelection(row, col, ctrlKey) {
         seatStates[seatKey] = 'yellow';
         changeSeatState(row, col, 'yellow');
     }
-    
-    // 更新配置和界面
+    lastSelectionType='single'
     saveConfig();
     renderViewerList();
+}
 }
 
 // 检查年龄限制
