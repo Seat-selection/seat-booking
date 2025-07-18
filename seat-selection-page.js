@@ -361,7 +361,7 @@ function deleteSelectedViewers() {
     
     saveConfig();
     renderViewerList();
-    render(); // 重新渲染座位图
+    //render(); // 重新渲染座位图
 }
 
 // 完成选座
