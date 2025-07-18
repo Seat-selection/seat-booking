@@ -1,165 +1,306 @@
 <!DOCTYPE html>
+<html lang="zh-CN">
 
 <head>
     <meta charset="utf-8">
-    <title>电影院选票</title>
+    <title>查看购票情况</title>
+    <style>
+        body {
+            background: url('background.avif');
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #information {
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px solid #888;
+            border-radius: 48px;
+            width: 92vw;
+            max-width: 1500px;
+            min-width: 900px;
+            min-height: 700px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 32px 32px 0 32px;
+            position: relative;
+        }
+
+        .section-label {
+            background: #1cb0f6;
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 6px;
+            padding: 8px 32px;
+            margin-bottom: 18px;
+            margin-left: 18px;
+            display: inline-block;
+            box-shadow: 0 2px 8px rgba(28, 176, 246, 0.08);
+        }
+
+        .tickets-area {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px 32px;
+            margin-bottom: 32px;
+            justify-items: center;
+            align-items: start;
+        }
+
+        .ticket-card {
+            background: linear-gradient(135deg, #eaffea 60%, #d0ffd0 100%);
+            border: 2px solid #6ebf6e;
+            border-radius: 8px;
+            width: 340px;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            font-size: 1.2rem;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            color: #222;
+            box-shadow: 0 2px 8px rgba(110, 191, 110, 0.08);
+            margin: 0;
+            padding: 18px 18px 12px 18px;
+            position: relative;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+        }
+
+        .personal-details {
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .seat-row {
+            width: 100%;
+            margin-bottom: 0;
+            font-weight: bold;
+        }
+
+        .select-area {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .select-area input[type="checkbox"] {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #222;
+            border-radius: 4px;
+            margin-right: 0;
+            accent-color: #1cb0f6;
+        }
+
+        #actions {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 120px;
+            margin-top: 48px;
+        }
+
+        #cancel-reservation,
+        #refund {
+            width: 260px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            transition: box-shadow 0.2s, transform 0.2s;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            user-select: none;
+        }
+
+        #cancel-reservation {
+            background: #ffd600;
+            color: #fff;
+            border: 2px solid #ffd600;
+        }
+
+        #cancel-reservation:hover {
+            background: #ffe066;
+            color: #222;
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        #refund {
+            background: #f44336;
+            color: #fff;
+            border: 2px solid #f44336;
+        }
+
+        #refund:hover {
+            background: #ff7961;
+            color: #222;
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        @media (max-width: 1200px) {
+            .tickets-area {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .ticket-card {
+                width: 260px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            #information {
+                min-width: 0;
+                width: 98vw;
+                padding: 8px 2vw 0 2vw;
+            }
+
+            .tickets-area {
+                grid-template-columns: 1fr;
+                gap: 18px 0;
+            }
+
+            .ticket-card {
+                width: 98%;
+                min-width: 0;
+            }
+
+            #actions {
+                gap: 32px;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div id="information">
-        <div id="text1">
-            已购买：
+        <div id="text1" class="section-label">已购买：</div>
+        <div id="bought" class="tickets-area">
+            <!-- JS生成已购买票 -->
         </div>
-        <div id="bought">
-            <div id="ticket">
-                <div id="personal-details">
-                </div>
-                <div id="select">
-                </div>
-            </div>
-            <div id="ticket">
-            </div>
-            <div id="ticket">
-            </div>
-            <div id="ticket">
-            </div>
+        <div id="text2" class="section-label">已预订：</div>
+        <div id="reserved" class="tickets-area">
+            <!-- JS生成已预订票 -->
         </div>
-        <div id="text2">
-            已预订：
-        </div>
-        <div id="reserved">
-            <div id="ticket">
-            </div>
-            <div id="ticket">
-            </div>
-            <div id="ticket">
-            </div>
-            <div id="ticket">
-            </div>
-        </div>
-        <div id="cancel">
-            <div id="cancel-reservation">
-            </div>
-            <div id="refund">
-            </div>
+        <div id="actions">
+            <button id="cancel-reservation">取消预订</button>
+            <button id="refund">退票</button>
         </div>
     </div>
+    <script>
+        // 示例数据，实际由后端或本地存储获取
+        const paidTickets = [
+            { name: '张三', seat: '1排5号', age: 22 },
+            { name: '李四', seat: '2排8号', age: 28 },
+            { name: '王五', seat: '3排2号', age: 19 }
+        ];
+        const reservedTickets = [
+            { name: '赵六', seat: '4排3号', age: 25 },
+            { name: '刘七', seat: '12排23号', age: 31 }
+        ];
+        // 渲染已购买票
+        const boughtDiv = document.getElementById('bought');
+        boughtDiv.innerHTML = '';
+        paidTickets.forEach((item, i) => {
+            const ticketDiv = document.createElement('div');
+            ticketDiv.className = 'ticket-card';
+            ticketDiv.id = `paid_ticket_${i}`;
+            // 个人信息
+            const detailsDiv = document.createElement('div');
+            detailsDiv.className = 'personal-details';
+            detailsDiv.id = `paid_personal-details_${i}`;
+            // 第一行：姓名、年龄
+            const row1 = document.createElement('div');
+            row1.className = 'row';
+            row1.innerHTML = `<span>姓名：${item.name}</span>&nbsp;&nbsp;<span>年龄：${item.age}</span>`;
+            // 第二行：座位号
+            const row2 = document.createElement('div');
+            row2.className = 'row seat-row';
+            row2.innerHTML = `<span>座位：${item.seat}</span>`;
+            detailsDiv.appendChild(row1);
+            detailsDiv.appendChild(row2);
+            // 复选框
+            const selectDiv = document.createElement('div');
+            selectDiv.className = 'select-area';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = `paid_select_${i}`;
+            selectDiv.appendChild(checkbox);
+            ticketDiv.appendChild(detailsDiv);
+            ticketDiv.appendChild(selectDiv);
+            boughtDiv.appendChild(ticketDiv);
+        });
+        // 渲染已预订票
+        const reservedDiv = document.getElementById('reserved');
+        reservedDiv.innerHTML = '';
+        reservedTickets.forEach((item, i) => {
+            const ticketDiv = document.createElement('div');
+            ticketDiv.className = 'ticket-card';
+            ticketDiv.id = `ticket_${i}`;
+            // 个人信息
+            const detailsDiv = document.createElement('div');
+            detailsDiv.className = 'personal-details';
+            detailsDiv.id = `reserved_personal-details_${i}`;
+            // 第一行：姓名、年龄
+            const row1 = document.createElement('div');
+            row1.className = 'row';
+            row1.innerHTML = `<span>姓名：${item.name}</span>&nbsp;&nbsp;<span>年龄：${item.age}</span>`;
+            // 第二行：座位号
+            const row2 = document.createElement('div');
+            row2.className = 'row seat-row';
+            row2.innerHTML = `<span>座位：${item.seat}</span>`;
+            detailsDiv.appendChild(row1);
+            detailsDiv.appendChild(row2);
+            // 复选框
+            const selectDiv = document.createElement('div');
+            selectDiv.className = 'select-area';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = `reserved_select_${i}`;
+            selectDiv.appendChild(checkbox);
+            ticketDiv.appendChild(detailsDiv);
+            ticketDiv.appendChild(selectDiv);
+            reservedDiv.appendChild(ticketDiv);
+        });
+        // 按钮逻辑
+        document.getElementById('cancel-reservation').onclick = function () {
+            // 获取所有选中的预订票id
+            const selected = [];
+            reservedTickets.forEach((item, i) => {
+                if (document.getElementById(`reserved_select_${i}`).checked) selected.push(i);
+            });
+            // 实际业务：移除选中票、更新后端、跳转
+            window.location.href = 'success.html';
+        };
+        document.getElementById('refund').onclick = function () {
+            // 获取所有选中的已购票id
+            const selected = [];
+            paidTickets.forEach((item, i) => {
+                if (document.getElementById(`paid_select_${i}`).checked) selected.push(i);
+            });
+            // 实际业务：移除选中票、更新后端、跳转
+            window.location.href = 'success.html';
+        };
+    </script>
 </body>
 
-<style>
-    body {
-        display: flex;
-        height: 100vh;
-        justify-content: center;
-        align-items: center;
-    }
-    #information {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        height: 800px;
-        width: 1200px;
-        background-color: rgba(37, 12, 147, 0.3);;
-    }
-    #text1, #text2 {
-        position: relative;
-        height: 70px;
-        width: 150px;
-        left: 50px;
-        background-color: rgba(179, 238, 16, 0.3);;
-        display: flex;    
-        justify-content: center; 
-        align-items: center;  
-        font-family: Arial, sans-serif; 
-        font-size: 25px;        
-        font-weight: bold;
-    }
-    #text1 {
-        top: 50px;
-    }
-    #text2 {
-        top: 120px;
-    }
-    #bought, #reserved, #cancel {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        left: 50px;
-        height: 150px;
-        width: 1100px;
-        background-color: rgba(29, 219, 102, 0.3);
-    }
-    #bought {
-        top: 70px;
-    }
-    #reserved {
-        top: 140px;
-    }
-    #cancel {
-        top: 180px;
-        justify-content: center; 
-        gap: 100px;
-    }
-    #cancel-reservation, #refund {
-        position: relative;
-        height: 50px;
-        width: 160px;
-        background-color: rgba(13, 38, 84, 0.3);
-        display: flex;    
-    }
-    #ticket {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-        height: 90px;
-        width: 200px;
-        margin-left: 20px;
-        background-color: rgba(37, 12, 147, 0.3);;
-    }
-    #personal-details, #select {
-        position: relative;
-        height: 35px;
-        width: 160px;
-        background-color: rgba(13, 38, 84, 0.3);
-        display: flex;    
-    }
-    #information::before, #bought::before, #reserved::before, #cancel::before, #cancel-reservation::before,  
-    #refund::before, #ticket::before, #personal-details::before, #select::before {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        font-size: 12px;
-        color: #000000;
-        font-family: monospace;
-    }
-    #information::before {
-        content: "查看购票情况页面 id=\"information\"";
-    }
-    #bought::before {
-        content: "id=\"bought\"";
-    }
-    #reserved::before {
-        content: "id=\"reserved\"";
-    }
-    #cancel::before {
-        content: "id=\"cancel\"";
-    }
-    #cancel-reservation::before {
-        content: "取消预订 id=\"cancel-reservation\"";
-    }
-    #refund::before {
-        content: "退票 id=\"refund\"";
-    }
-    #ticket::before {
-        content: "票信息 id=\"ticket\"";
-    }
-    #personal-details::before {
-        content: "姓名年龄 id=\"personal-details\"";
-    }
-    #select::before {
-        content: "复选框 id=\"select\"";
-    }
-</style>
+</html>
