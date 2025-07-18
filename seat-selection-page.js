@@ -199,34 +199,54 @@ function autoSelectSeats() {
         autoSelectForIndividual();
     }
 }
-
 // 个人票自动选座
 function autoSelectForIndividual() {
+    if (config.viewers.length === 0) {
+        alert('请先添加观影人！');
+        return;
+    }
+    
+    // 先清除所有人的座位
     config.viewers.forEach(viewer => {
-        if (viewer.seatRow !== null) return; // 已选座位跳过
-        
-        //const age = parseInt(viewer.age);
+        if (viewer.seatRow !== null && viewer.seatCol !== null) {
+            const seatKey = `${viewer.seatRow}-${viewer.seatCol}`;
+            seatStates[seatKey] = 'green';
+            changeSeatState(viewer.seatRow, viewer.seatCol, 'green');
+            viewer.seatRow = null;
+            viewer.seatCol = null;
+        }
+    });
+    
+    config.viewers.forEach(viewer => {
+        const age = parseInt(viewer.age);
         let startRow = 0;
         let endRow = config.totalRows - 1;
         
+        // 应用年龄限制
+        if (age < 15) startRow = 3;
+        if (age > 60) endRow = config.totalRows - 4;
         
-        // 寻找可用座位
+        // 收集所有可用座位
+        const availableSeats = [];
         for (let row = startRow; row <= endRow; row++) {
             for (let col = 0; col < config.totalCols; col++) {
                 const seatKey = `${row}-${col}`;
                 if (seatStates[seatKey] === 'green') {
-                    viewer.seatRow = row;
-                    viewer.seatCol = col;
-                    seatStates[seatKey] = 'yellow';
-                    changeSeatState(row, col, 'yellow');
-                    goto_next_viewer = true;
-                    break;
+                    availableSeats.push({row, col});
                 }
             }
-            if (viewer.seatRow !== null) break;
         }
         
-        if (viewer.seatRow === null) {
+        if (availableSeats.length > 0) {
+            // 随机选择一个座位
+            const randomIndex = Math.floor(Math.random() * availableSeats.length);
+            const selectedSeat = availableSeats[randomIndex];
+            
+            viewer.seatRow = selectedSeat.row;
+            viewer.seatCol = selectedSeat.col;
+            seatStates[`${selectedSeat.row}-${selectedSeat.col}`] = 'yellow';
+            changeSeatState(selectedSeat.row, selectedSeat.col, 'yellow');
+        } else {
             alert(`无法为${viewer.name}自动分配座位！`);
         }
     });
@@ -243,6 +263,22 @@ function autoSelectForGroup() {
         return;
     }
     
+    if (viewerCount === 0) {
+        alert('请先添加观影人！');
+        return;
+    }
+    
+    // 先清除所有人的座位
+    config.viewers.forEach(viewer => {
+        if (viewer.seatRow !== null && viewer.seatCol !== null) {
+            const seatKey = `${viewer.seatRow}-${viewer.seatCol}`;
+            seatStates[seatKey] = 'green';
+            changeSeatState(viewer.seatRow, viewer.seatCol, 'green');
+            viewer.seatRow = null;
+            viewer.seatCol = null;
+        }
+    });
+    
     // 确定年龄限制范围
     let minAge = Math.min(...config.viewers.map(v => parseInt(v.age)));
     let maxAge = Math.max(...config.viewers.map(v => parseInt(v.age)));
@@ -253,38 +289,51 @@ function autoSelectForGroup() {
     if (minAge < 15) startRow = 3;
     if (maxAge > 60) endRow = config.totalRows - 4;
     
-    // 寻找连续座位
+    // 收集所有可能的连续座位组合
+    const availableGroups = [];
+    
     for (let row = startRow; row <= endRow; row++) {
-        let consecutiveSeats = 0;
-        let startCol = -1;
-        
-        for (let col = 0; col < config.totalCols; col++) {
-            const seatKey = `${row}-${col}`;
-            if (seatStates[seatKey] === 'green') {
-                if (consecutiveSeats === 0) startCol = col;
-                consecutiveSeats++;
-                
-                if (consecutiveSeats >= viewerCount) {
-                    // 找到足够的连续座位，分配给观影人
-                    for (let i = 0; i < viewerCount; i++) {
-                        const viewer = config.viewers[i];
-                        viewer.seatRow = row;
-                        viewer.seatCol = startCol + i;
-                        const seatKey = `${row}-${startCol + i}`;
-                        seatStates[seatKey] = 'yellow';
-                        changeSeatState(row, startCol + i, 'yellow');
-                    }
-                    saveConfig();
-                    renderViewerList();
-                    return;
+        // 对于每一行，找出所有可能的连续座位起始位置
+        for (let startCol = 0; startCol <= config.totalCols - viewerCount; startCol++) {
+            let canUseThisGroup = true;
+            
+            // 检查从startCol开始的viewerCount个座位是否都可用
+            for (let i = 0; i < viewerCount; i++) {
+                const seatKey = `${row}-${startCol + i}`;
+                if (seatStates[seatKey] !== 'green') {
+                    canUseThisGroup = false;
+                    break;
                 }
-            } else {
-                consecutiveSeats = 0;
+            }
+            
+            if (canUseThisGroup) {
+                availableGroups.push({
+                    row: row,
+                    startCol: startCol
+                });
             }
         }
     }
     
-    alert('无法为团体找到足够的连续座位！');
+    if (availableGroups.length > 0) {
+        // 随机选择一组座位
+        const randomIndex = Math.floor(Math.random() * availableGroups.length);
+        const selectedGroup = availableGroups[randomIndex];
+        
+        // 分配座位
+        for (let i = 0; i < viewerCount; i++) {
+            const viewer = config.viewers[i];
+            viewer.seatRow = selectedGroup.row;
+            viewer.seatCol = selectedGroup.startCol + i;
+            const seatKey = `${selectedGroup.row}-${selectedGroup.startCol + i}`;
+            seatStates[seatKey] = 'yellow';
+            changeSeatState(selectedGroup.row, selectedGroup.startCol + i, 'yellow');
+        }
+        saveConfig();
+        renderViewerList();
+    } else {
+        alert('无法为团体找到足够的连续座位！');
+    }
 }
 
 // 删除选中的观影人
