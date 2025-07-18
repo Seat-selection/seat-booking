@@ -237,20 +237,7 @@
                 </p>
             </div>
             <!-- 在这里编写观影人被选中的相关逻辑 -->
-            <script>
-                const audiences = document.querySelectorAll('.audience');
-                audiences.forEach(audience => {
-                    audience.addEventListener('click', function () {
-                        if (this.classList.contains('selected')) {
-                            // 如果已经选中，点击后移除选中状态
-                            this.classList.remove('selected');
-                        } else {
-                            // 如果未选中，点击后添加选中状态
-                            this.classList.add('selected');
-                        }
-                    });
-                });
-            </script>
+            
         </div>
         <div id="delete">
             <button id="delete-button">
@@ -263,6 +250,7 @@
             </button>
         </div>
     </div>
+    <script src="./seat-selection-page.js"></script>
 </body>
 
 <style>
