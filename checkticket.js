@@ -35,8 +35,26 @@ document.addEventListener('DOMContentLoaded', function() {
         const cinemaConfigData = sessionStorage.getItem('cinemaConfig');
         const config = cinemaConfigData ? JSON.parse(cinemaConfigData) : {};
         
-        // 将已选座位存入reservedSeats
-        config.reservedSeats = [...config.reservedSeats, ...config.selectedSeats];
+        // 将已选座位存入reservedSeats，确保每个seat都为{row, col, viewer: {name, age}}
+        config.reservedSeats = [
+            ...(config.reservedSeats || []),
+            ...((config.selectedSeats || []).map(seat => {
+                let name = seat.viewer && seat.viewer.name ? seat.viewer.name : '未命名';
+                let age = seat.viewer && seat.viewer.age ? seat.viewer.age : '';
+                if ((!seat.viewer || !seat.viewer.name || !seat.viewer.age) && config.viewers && Array.isArray(config.viewers)) {
+                    const matched = config.viewers.find(v => v.seatRow === seat.row && v.seatCol === seat.col);
+                    if (matched) {
+                        name = matched.name;
+                        age = matched.age;
+                    }
+                }
+                return {
+                    row: seat.row,
+                    col: seat.col,
+                    viewer: { name, age }
+                };
+            }))
+        ];
         
         // 保存更新后的配置
         sessionStorage.setItem('cinemaConfig', JSON.stringify(config));

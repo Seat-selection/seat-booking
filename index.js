@@ -8,18 +8,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeSession() {
-    // 保留现有配置中的已购票信息
+    // 保留现有配置中的已购票和已预订信息
     const existingConfig = JSON.parse(sessionStorage.getItem('cinemaConfig') || '{}');
     sessionStorage.clear();
-    // 初始化新配置时继承已购座位
+    // 初始化新配置时继承已购座位和已预订座位
     const config = {
         ticketType: '',
         viewers: [],
-        selectedSeats: existingConfig.selectedSeats || [],//已选座位
+        selectedSeats: [],//已选座位
         reservedSeats: existingConfig.reservedSeats || [],//已预订座位
         purchasedSeats: existingConfig.purchasedSeats || [],//已购座位
         totalRows: 10,
-        totalCols: 20//要与seat-selection-page统一
+        totalCols: 20
     };
     
     sessionStorage.setItem('cinemaConfig', JSON.stringify(config));

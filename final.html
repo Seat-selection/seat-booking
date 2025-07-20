@@ -3,17 +3,16 @@
 <head>
     <meta charset="utf-8">
     <title>电影院选票</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div id="final">
+    <div id="final" class="glass">
         <div id="information">
             添加观影人成功！
         </div>
         <div id="finished">
-            <button id="finished-button">
-                OK
-            </button>
+            <button id="finished-button">完成</button>
         </div>
     </div>
     <script src="./final.js"></script>
@@ -30,13 +29,7 @@
         font-size: 18px;
         text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
     }
-    body {
-        background-image: url('background.avif');  
-        background-size: cover;              
-        background-position: center;        
-        background-repeat: no-repeat;       
-        background-attachment: fixed;   
-    }
+    /* 移除body背景，统一用全局 */
     #final {
         position: relative;
         display: flex;
@@ -44,7 +37,7 @@
         justify-content: center;
         height: 300px;
         width: 600px;
-        background-color: rgba(255, 255, 255, 0.8);
+        /* background-color: rgba(255, 255, 255, 0.8); */
 
         border: 2px solid #ffffff; 
         border-radius: 8px;       
@@ -54,6 +47,12 @@
         justify-content: center; 
         align-items: center; 
         gap: 25px;          
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        border-radius: 18px;
+        border: none;
     }
     
     #information, #finished {
@@ -70,6 +69,14 @@
         justify-content: center; 
         align-items: center; 
     }
+    #information {
+        color: #fff;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-left: 32px;
+    }
+    /* 删除原有按钮样式 */
+    /*
     #finished-button {
         border: none; 
         outline: none;
@@ -99,6 +106,69 @@
     }
     #finished-button:active {
         background-color: rgba(255, 160, 0, 1.0);
+    }
+    */
+    #finished-button, button, input[type="button"], input[type="submit"] {
+        border: none;
+        outline: none;
+        border-radius: 16px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        background: rgba(0, 180, 255, 0.48);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 180, 255, 0.48);
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        padding: 10px 24px;
+        height: 60px;
+        width: 180px;
+        position: relative;
+        overflow: hidden;
+    }
+    #finished-button::before, button::before, input[type="button"]::before, input[type="submit"]::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to right, 
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: rotate(30deg);
+        animation: liquidFlow 4s infinite linear;
+        z-index: 1;
+        pointer-events: none;
+    }
+    @keyframes liquidFlow {
+        0% { left: -50%; }
+        100% { left: 150%; }
+    }
+    #finished-button:hover, button:hover, input[type="button"]:hover, input[type="submit"]:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5), 
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(15px) saturate(200%);
+        -webkit-backdrop-filter: blur(15px) saturate(200%);
+    }
+    #finished-button:active, button:active, input[type="button"]:active, input[type="submit"]:active {
+        transform: translateY(1px);
+    }
+
+    /* 彻底无背景、无阴影、无边框、无毛玻璃，仅保留内容和布局 */
+    #final, #information, #finished {
+        background: none !important;
+        box-shadow: none !important;
+        border: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
     /* #final::before, #information::before, #finished::before, #finished-button::before {
         position: absolute;

@@ -1,0 +1,72 @@
+/* 统一主色调和毛玻璃效果 */
+:root {
+  --main-bg: rgba(40, 60, 120, 0.45);
+  --main-blur: 18px;
+  --main-border: rgba(255,255,255,0.18);
+  --main-gradient: linear-gradient(135deg, #6a82fb 0%, #fc5c7d 100%);
+  --main-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+}
+
+/* 只在首页显示黑色渐变背景 */
+body.index-bg {
+  background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('background.avif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+body {
+  min-height: 100vh;
+  background: url('background.avif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+}
+
+.glass {
+  /* 只保留圆角和阴影，不设置背景、毛玻璃和边框 */
+  background: none;
+  box-shadow: var(--main-shadow);
+  border-radius: 24px;
+  /* 不要边框 */
+}
+
+@keyframes glassMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+button, .btn, input[type="submit"] {
+  border: none;
+  outline: none;
+  border-radius: 16px;
+  font-size: 16px;
+  color: #fff;
+  background: rgba(40, 60, 120, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  transition: all 0.3s;
+  cursor: pointer;
+  padding: 10px 24px;
+}
+button:hover, .btn:hover, input[type="submit"]:hover {
+  box-shadow: 0 12px 32px rgba(31,38,135,0.25);
+  background: rgba(40, 60, 120, 0.28);
+  color: #fff;
+}
+button:active, .btn:active, input[type="submit"]:active {
+  box-shadow: 0 6px 16px rgba(31,38,135,0.18);
+  background: rgba(40, 60, 120, 0.22);
+}
+
+input, select, textarea {
+  background: rgba(255,255,255,0.5);
+  border: 1px solid var(--main-border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  margin-bottom: 8px;
+} 

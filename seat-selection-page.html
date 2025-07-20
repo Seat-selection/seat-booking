@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 
 <head>
-    <meta charset="utf-8">
-    <title>电影院选票</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>座位选择</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div id="seat-selection">
+    <div id="seat-selection" class="glass">
         <canvas id="seat-map">
         </canvas>
         <script>
@@ -21,7 +23,7 @@
             // console.log(canvas.width, canvas.height)
             
             
-            //静态配置参数的选取
+            
             const cinemaConfig = {
                 small: { rows: 5, cols: 20, baseRadius: 300, rowSpacing: 40 },
                 medium: { rows: 10, cols: 20, baseRadius: 200, rowSpacing: 35 },
@@ -29,7 +31,7 @@
             };
 
             // 当前使用的配置
-            let currentConfig = cinemaConfig.medium
+            let currentConfig = cinemaConfig.medium;
             let rowSpacing = currentConfig.rowSpacing;
             let ROWS = currentConfig.rows;
             let COLS = currentConfig.cols;
@@ -90,24 +92,29 @@
                 // ctx.fill();
                 // 设置字体样式
                 // 第一行文字：银屏中央（大字体、金色描边）
-                ctx.font = '32px "PingFang SC", sans-serif';
-                ctx.fillStyle = 'rgba(255, 215, 0, 0.8)'; // 金色填充
-                ctx.strokeStyle = 'rgba(184, 134, 11, 0.9)'; // 深金色描边
-                ctx.lineWidth = 2;
+                // --- 简洁美化“银屏中央” ---
+                ctx.save();
+                ctx.font = 'bold 44px "Microsoft YaHei", "PingFang SC", Arial, sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-
-                // 同时绘制填充和描边，形成立体效果
+                ctx.fillStyle = '#222'; // 深色
+                ctx.shadowColor = 'rgba(255,255,255,0.5)';
+                ctx.shadowBlur = 10;
                 ctx.fillText('银屏中央', canvas.width / 2, canvas.height - 120);
-                ctx.strokeText('银屏中央', canvas.width / 2, canvas.height - 120);
+                ctx.restore();
 
                 // 第二行文字：请点击座位选座（小字体、蓝色填充）
-                ctx.font = 'bold 18px "PingFang SC", "Microsoft YaHei", sans-serif'; // 加粗字体
-                ctx.fillStyle = '#2c3e50';  // 深蓝色填充
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)'; // 白色细描边（增强可读性）
-                ctx.lineWidth = 1;
-
+                // --- 简洁美化“请点击座位选座” ---
+                ctx.save();
+                ctx.font = 'bold 24px "Microsoft YaHei", "PingFang SC", Arial, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#2c3e50';
+                ctx.shadowColor = 'rgba(255,255,255,0.3)';
+                ctx.shadowBlur = 6;
                 ctx.fillText('请点击座位选座', canvas.width / 2, canvas.height - 60);
+                ctx.restore();
+
                 for (var i = 0; i < ROWS; i++) {
                     for (var j = 0; j < COLS; j++) {
                         changeSeatState(i, j, 'green');
@@ -149,24 +156,13 @@
             })
         </script>
         <div id="option">
-            <!-- <div id="manual">
-            </div> -->
-            <!-- <button id="manual" >
-                手动选票
-            </button> -->
-            <!-- <div id="auto">
-            </div> -->
-            <button id="auto">
-                自动选座
-            </button>
+            <button class="btn btn-secondary" id="auto">自动选座</button>
         </div>
         <div id="check">
-            <button id="check-button">
-                查看我的购票
-            </button>
+            <button class="btn btn-primary" id="check-button">查看我的购票</button>
         </div>
     </div>
-    <div id="people">
+    <div id="people" class="glass">
         <div id="addition">
             <button id="addition-button">
                 添加观影人
@@ -254,23 +250,19 @@
 </body>
 
 <style>
+    /* 移除body和主要容器的背景样式，统一用全局 */
     body {
         display: flex;
         height: 100vh;
         justify-content: center;
         align-items: center;
-        gap: 40px; 
-        color: #ffffff; 
-        font-family: 'SimSun', 'Songti SC', 'Microsoft YaHei', sans-serif;
+        gap: 40px;
+        color: #f3f6fa; /* 更亮的字体色 */
+        font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
         font-size: 18px;
-        text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
-    }
-    body {
-        background-image: url('background.avif');  
-        background-size: cover;              
-        background-position: center;        
-        background-repeat: no-repeat;       
-        background-attachment: fixed;   
+        text-shadow: 0 2px 8px rgba(0,0,0,0.45); /* 更柔和的阴影 */
+        margin: 0;
+        padding: 0;
     }
     #seat-selection {
         position: relative;
@@ -296,15 +288,12 @@
     #seat-map {
         height: 700px;
         width: 1000px;
-        /* background-color: #FFFFFF; */
-        background-color: rgba(255, 255, 255, 0.8);
-
-        border: 2px solid #ffffff; 
-        border-radius: 8px;       
-
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 
-                    0 0 0 1px rgba(0, 0, 0, 0.1);     
+        background: rgba(255,255,255,0.82); /* 白色半透明 */
+        border: none;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
         cursor: pointer;
+        /* 移除毛玻璃效果 */
     }
     #option {
         position: relative;
@@ -331,84 +320,95 @@
         position: relative;
         height: 60px;
         width: 180px;
-        border-radius: 8px;
+        border-radius: 16px; /* 使用与首页一致的圆角 */
         font-size: 16px;
-        background-color: rgba(13, 38, 84, 0.3);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
+        font-weight: 600; /* 加粗字体提高清晰度 */
         cursor: pointer;
+        transition: all 0.3s ease;
+        overflow: hidden;
+        /* 液态毛玻璃效果 */
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
     }
+
+    /* 统一按钮动态效果 */
     #auto:hover, #check-button:hover, #addition-button:hover, #done-button:hover, #delete-button:hover {
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        transform: translateY(-2px);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5), 
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(15px) saturate(200%);
+        -webkit-backdrop-filter: blur(15px) saturate(200%);
     }
+
     #auto:active, #check-button:active, #addition-button:active, #done-button:active, #delete-button:active {
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         transform: translateY(1px);
     }
 
-    #auto {
-        background-color: rgba(52, 152, 219, 0.8);
-    }
-    #auto:hover {
-        background-color: rgba(41, 128, 185, 0.9);
-    }
-    #auto:active {
-        background-color: rgba(32, 112, 160, 1.0); 
-    }
-
-    #check-button {
-        background-color: rgba(255, 127, 80, 0.8);
-    }
-    #check-button:hover {
-        background-color: rgba(255, 99, 71, 0.9);
-    }
-    #check-button:active {
-        background-color: rgba(255, 69, 0, 1.0);
-    }
-
-    #addition-button {
-        background-color: rgba(255, 215, 0, 0.8);
-    }
-    #addition-button:hover {
-        background-color: rgba(255, 193, 7, 0.9);
-    }
-    #addition-button:active {
-        background-color: rgba(255, 160, 0, 1.0);
+    /* 液态流动效果 - 统一应用到所有按钮 */
+    #auto::before, #check-button::before, #addition-button::before, #done-button::before, #delete-button::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to right, 
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: rotate(30deg);
+        animation: liquidFlow 4s infinite linear;
+        z-index: 1;
     }
 
-    #done-button {
-        background-color: rgba(76, 175, 80, 0.8);
-    }
-    #done-button:hover {
-        background-color: rgba(67, 160, 71, 0.9);
-    }
-    #done-button:active {
-        background-color: rgba(46, 125, 50, 1.0);
-    }
-
-    #delete-button {
-        background-color: rgba(180, 99, 219, 0.8);
-    }
-    #delete-button:hover {
-        background-color: rgba(160, 80, 199, 0.9);
-    }
-    #delete-button:active {
-        background-color: rgba(140, 60, 179, 1.0);
-    }
-
-
-    #addition, #done, #delete {
+    /* 观影人卡片样式优化（唯一深蓝色毛玻璃版本） */
+    .audience {
+        font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
         position: relative;
+        height: 50px;
+        width: 280px;
+        background: rgba(2, 78, 129, 0.85); /* 深蓝色毛玻璃 */
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 12px;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.18);
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100px;
-        width: 320px;
-        /* background-color: rgba(179, 238, 16, 0.3); */
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
-    #done, #delete {
-        height: 70px;
+    .audience:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    }
+    .audience.selected {
+        background-color: rgba(189, 0, 0, 0.7);
+    }
+    .audience p {
+        margin: 0;
+        font-weight: bold;
+        color: #e0e6f0;
+    }
+
+    /* 添加液态流动动画 */
+    @keyframes liquidFlow {
+        0% {
+            left: -50%;
+        }
+        100% {
+            left: 150%;
+        }
     }
     #audience-list {
         position: relative;
@@ -441,33 +441,8 @@
     #audience-list::-webkit-scrollbar-thumb:hover {
         background: rgba(255, 255, 255, 0.5); 
     }
-    .audience {
-        font-family: "PingFang SC", "Microsoft YaHei", "Heiti SC", sans-serif;
-        position: relative;
-        height: 50px;
-        width: 280px;
-        background-color: rgba(5, 221, 250, 0.7);
-        /* border: 1px solid rgba(13, 38, 84, 0.5); */
-        border-radius: 4px;
-        box-sizing: border-box;
-        gap: 0px;
 
-        display: flex;
-        flex-direction: column;   
-        justify-content: center;  
-        align-items: center;      
-        text-align: center;       
-        cursor: pointer;
-    }
 
-    .audience p {
-        margin: 0;
-        font-weight: bold;
-    }
-
-    .audience.selected {
-        background-color: rgba(255, 0, 0, 0.7);
-    }
 
     #seat-selection::before, #people::before, #seat-map::before, #option::before, #manual::before, #auto::before, #check::before, 
     #check-button::before, #addition::before, #addition-button::before, #audience-list::before, #audience::before,
@@ -521,4 +496,9 @@
     #done-button::before {
         content: "\"我选好了\"按钮 id=\"done-button\"";
     } */
+    #done-button {
+        background: rgba(3, 52, 85, 0.92) !important;
+        color: #fff;
+        padding-left: 32px;
+    }
 </style>

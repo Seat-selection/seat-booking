@@ -490,7 +490,8 @@ function renderViewerList() {
 // 获取座位颜色（用于Canvas绘制）
 function getSeatColor(row, col) {
     const seatKey = `${row}-${col}`;
-    return seatStates[seatKey] || 'green';
+    const color = seatStates[seatKey] || 'green';
+    return (color === 'green') ? '#228B22' : color;
 }
 
 // 保存配置到sessionStorage

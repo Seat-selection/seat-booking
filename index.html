@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>座位预订系统 - 开始页面</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         * {
             margin: 0;
@@ -11,12 +12,13 @@
             box-sizing: border-box;
         }
 
+        /* 移除body的背景样式，统一用全局 */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('background.avif');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            /* background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('background.avif'); */
+            /* background-size: cover; */
+            /* background-position: center; */
+            /* background-repeat: no-repeat; */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -79,16 +81,68 @@
 
         .option-button {
             padding: 12px 24px;
-            border-radius: 8px;
+            border-radius: 16px; /* 统一为16px圆角 */
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600; /* 加粗字体 */
             cursor: pointer;
             transition: all 0.3s ease;
-            min-width: 120px;
+            min-width: 140px; /* 统一宽度 */
             border: none;
             outline: none;
+            position: relative; /* 新增：为伪元素定位 */
+            overflow: hidden; /* 新增：隐藏溢出内容 */
+            /* 液态毛玻璃核心效果 */
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
         }
 
+        /* 新增：液态流动效果 */
+        .option-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: liquidFlow 6s infinite linear;
+        }
+
+        /* 新增：流动动画 */
+        @keyframes liquidFlow {
+            0% {
+                left: -50%;
+            }
+            100% {
+                left: 150%;
+            }
+        }
+
+        /* 统一按钮交互效果 */
+        .option-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5), 
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px) saturate(200%);
+            -webkit-backdrop-filter: blur(15px) saturate(200%);
+        }
+
+        .option-button:active {
+            transform: translateY(1px);
+        }
+        /* 删除差异化样式 */
+        /*
         .option-button.individual {
             background-color: #e0e0e0;
             color: #333;
@@ -107,6 +161,7 @@
         .option-button.team:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
+        */
 
         .option.selected .option-button.individual {
             background-color: #f0f0f0;
@@ -138,12 +193,12 @@
             animation: float 6s ease-in-out infinite;
         }
 
-        .poster:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        /* .poster:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
         .poster:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
         .poster:nth-child(3) { top: 60%; left: 15%; animation-delay: 2s; }
         .poster:nth-child(4) { top: 70%; right: 20%; animation-delay: 3s; }
         .poster:nth-child(5) { top: 40%; left: 80%; animation-delay: 4s; }
-        .poster:nth-child(6) { top: 80%; left: 70%; animation-delay: 5s; }
+        .poster:nth-child(6) { top: 80%; left: 70%; animation-delay: 5s; } */
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
@@ -166,8 +221,8 @@
         }
     </style>
 </head>
-<body>
-    <!-- 背景海报效果 -->
+<body class="index-bg">
+    <!-- 背景海报效果
     <div class="background-posters">
         <div class="poster"></div>
         <div class="poster"></div>
@@ -175,9 +230,9 @@
         <div class="poster"></div>
         <div class="poster"></div>
         <div class="poster"></div>
-    </div>
+    </div> -->
 
-    <div class="container">
+    <div class="container glass">
         <h1 class="main-title">影院在线购票服务</h1>
         <p class="subtitle">请开启您的观影之旅!</p>
         
