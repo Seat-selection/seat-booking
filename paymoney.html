@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>支付订单</title>
+    <style>
+        body {
+            background: url('background.avif');
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #pay-container {
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px solid #888;
+            border-radius: 36px;
+            width: 420px;
+            min-height: 420px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 36px 32px 32px 32px;
+        }
+
+        #pay-title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 32px;
+            letter-spacing: 2px;
+        }
+
+        #pay-methods {
+            width: 100%;
+            margin-bottom: 32px;
+        }
+
+        .pay-method-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+        }
+
+        .pay-method-option input[type="radio"] {
+            width: 22px;
+            height: 22px;
+            accent-color: #1cb0f6;
+            margin-right: 12px;
+        }
+
+        #total-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3886e6;
+            margin-bottom: 36px;
+            text-align: center;
+        }
+
+        #pay-btn {
+            width: 220px;
+            height: 56px;
+            border-radius: 16px;
+            background: #ffd600;
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+
+        #pay-btn:hover {
+            background: #ffe066;
+            color: #222;
+            transform: translateY(-2px) scale(1.04);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="pay-container">
+        <div id="pay-title">支付订单</div>
+        <form id="pay-form" onsubmit="return false;">
+            <div id="pay-methods">
+                <div class="pay-method-option">
+                    <input type="radio" name="pay-method" id="bank" value="bank" checked>
+                    <label for="bank">银行卡支付</label>
+                </div>
+                <div class="pay-method-option">
+                    <input type="radio" name="pay-method" id="wechat" value="wechat">
+                    <label for="wechat">微信支付</label>
+                </div>
+                <div class="pay-method-option">
+                    <input type="radio" name="pay-method" id="alipay" value="alipay">
+                    <label for="alipay">支付宝支付</label>
+                </div>
+            </div>
+            <div id="total-amount">应付金额：0元</div>
+            <button id="pay-btn" type="button">支付</button>
+        </form>
+    </div>
+    <script src="paymoney.js">
+        // 购票信息存储在本地或由前一页面传递，这里用示例数据
+        // const tickets = [
+        //     { username: '张三', seat: '1排5号' },
+        //     { username: '李四', seat: '2排8号' },
+        //     { username: '王五', seat: '3排2号' }
+        // ];
+        // const pricePerTicket = 50; // 单张票价（元）
+        // const total = tickets.length * pricePerTicket;
+        // document.getElementById('total-amount').textContent = `应付金额：${total}元`;
+        // document.getElementById('pay-btn').onclick = function () {
+        //     localStorage.setItem('successMsg', '支付成功！');
+        //     window.location.href = 'success.html';
+        // };
+    </script>
+</body>
+
+</html>

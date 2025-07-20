@@ -1,0 +1,62 @@
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化sessionStorage
+    initializeSession();
+    
+    // 绑定按钮事件
+    bindEvents();
+});
+
+function initializeSession() {
+    // 保留现有配置中的已购票信息
+    const existingConfig = JSON.parse(sessionStorage.getItem('cinemaConfig') || '{}');
+    sessionStorage.clear();
+    // 初始化新配置时继承已购座位
+    const config = {
+        ticketType: '',
+        viewers: [],
+        selectedSeats: existingConfig.selectedSeats || [],//已选座位
+        reservedSeats: existingConfig.reservedSeats || [],//已预订座位
+        purchasedSeats: existingConfig.purchasedSeats || [],//已购座位
+        totalRows: 10,
+        totalCols: 20//要与seat-selection-page统一
+    };
+    
+    sessionStorage.setItem('cinemaConfig', JSON.stringify(config));
+}
+
+function bindEvents() {
+    const individualBtn = document.getElementById('individual');
+    const groupBtn = document.getElementById('group');
+    
+    if (individualBtn) {
+        individualBtn.addEventListener('click', function() {
+            selectTicketType('individual');
+        });
+    }
+    
+    if (groupBtn) {
+        groupBtn.addEventListener('click', function() {
+            selectTicketType('group');
+        });
+    }
+}
+
+function selectTicketType(type) {
+    const config = JSON.parse(sessionStorage.getItem('cinemaConfig'));
+    config.ticketType = type;
+    sessionStorage.setItem('cinemaConfig', JSON.stringify(config));
+    
+    // 跳转到选座页面
+    window.location.href = 'seat-selection-page.html';
+}
+
+// 辅助函数：获取配置
+function getConfig() {
+    return JSON.parse(sessionStorage.getItem('cinemaConfig'));
+}
+
+// 辅助函数：保存配置
+function saveConfig(config) {
+    sessionStorage.setItem('cinemaConfig', JSON.stringify(config));
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>操作成功</title>
+    <style>
+        body {
+            background: url('background.avif');
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #success-container {
+            width: 600px;
+            min-height: 320px;
+            background: rgba(255,255,255,0.85);
+            border: 2px solid #b6eab6;
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            padding: 48px 0 48px 0;
+        }
+        .success-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 32px;
+        }
+        .success-icon {
+            display: none;
+        }
+        #success-message {
+            font-size: 1.7rem;
+            color: #222;
+            line-height: 2.5rem;
+            text-align: center;
+            min-width: 320px;
+            max-width: 400px;
+            word-break: break-all;
+            margin-bottom: 32px;
+        }
+        #ok-btn {
+            width: 220px;
+            height: 56px;
+            border-radius: 16px;
+            background: #ffd600;
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin-top: 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+        #ok-btn:hover {
+            background: #ffe066;
+            color: #222;
+            transform: translateY(-2px) scale(1.04);
+        }
+        @media (max-width: 1000px) {
+            #success-container { width: 98vw; min-width: 0; }
+            .success-content { flex-direction: column; }
+            #success-message { text-align: center; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="success-container">
+        <div class="success-content">
+            <div class="success-icon">
+                <!-- SVG对勾图标 -->
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                    <polyline points="20,55 45,80 80,30"
+                        style="fill:none;stroke:black;stroke-width:10;stroke-linecap:round;stroke-linejoin:round" />
+                </svg>
+            </div>
+            <div id="success-message">
+                操作成功！
+            </div>
+        </div>
+        <button id="ok-btn">OK</button>
+    </div>
+    <script src="success.js">
+        // 可通过localStorage、URL参数等方式传递消息
+        // 可以在跳转前设置 localStorage.setItem('successMsg', '支付成功！');
+        // 根据操作类型,设置不同的成功消息
+        // let msg = localStorage.getItem('successMsg');
+        // if (!msg) {
+        //     msg = '未知信息';
+        // }
+        // document.getElementById('success-message').innerHTML = msg;
+        // document.getElementById('ok-btn').onclick = function () {
+        //     window.history.back();
+        // };
+    </script>
+</body>
+
+</html>

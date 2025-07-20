@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <title>电影院选票</title>
+    <style>
+        body {
+            background: url('background.avif');
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #selected-tickets {
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px solid #222;
+            border-radius: 48px;
+            width: 90vw;
+            max-width: 1500px;
+            min-width: 900px;
+            height: 80vh;
+            min-height: 600px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 32px 0 32px;
+            position: relative;
+        }
+
+        #text {
+            background: #3886e6;
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+            border-radius: 4px;
+            padding: 8px 32px;
+            margin: 0 auto 32px auto;
+            display: block;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(56, 134, 230, 0.08);
+        }
+
+        #selected {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 32px 32px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            margin-bottom: 48px;
+            justify-items: center;
+            align-items: center;
+        }
+
+        .ticket {
+            background: linear-gradient(135deg, #eaffea 60%, #d0ffd0 100%);
+            border: 2px solid #6ebf6e;
+            border-radius: 8px;
+            width: 340px;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            color: #222;
+            box-shadow: 0 2px 8px rgba(110, 191, 110, 0.08);
+            margin: 0;
+            padding: 16px 12px;
+        }
+
+        .username,
+        .seat {
+            margin-bottom: 6px;
+            padding-left: 2px;
+        }
+
+        #buy {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 120px;
+            width: 100%;
+            margin-top: 32px;
+        }
+
+        #reserve,
+        #pay {
+            width: 220px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            transition: box-shadow 0.2s, transform 0.2s;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            user-select: none;
+        }
+
+        #reserve {
+            background: #ffd600;
+            color: #fff;
+            border: 2px solid #ffd600;
+        }
+
+        #reserve:hover {
+            background: #ffe066;
+            color: #222;
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        #pay {
+            background: #f44336;
+            color: #fff;
+            border: 2px solid #f44336;
+        }
+
+        #pay:hover {
+            background: #ff7961;
+            color: #222;
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        #selected-tickets::before,
+        #selected::before,
+        #buy::before,
+        #reserve::before,
+        #pay::before,
+        .ticket::before,
+        .username::before,
+        .seat::before {
+            display: none;
+        }
+
+        @media (max-width: 1200px) {
+            #selected {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+            }
+
+            .ticket {
+                width: 260px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            #selected-tickets {
+                min-width: 0;
+                width: 98vw;
+                padding: 8px 2vw 0 2vw;
+            }
+
+            #selected {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(6, 1fr);
+                gap: 18px 0;
+            }
+
+            .ticket {
+                width: 98%;
+                min-width: 0;
+            }
+
+            #buy {
+                gap: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="selected-tickets">
+        <div id="text">
+            您已选中座位如下：
+        </div>
+        <div id="selected">
+            <!-- 票据信息框由JS动态生成 -->
+        </div>
+        <div id="buy">
+            <button id="reserve">预定</button>
+            <button id="pay">支付</button>
+        </div>
+    </div>
+    <script src="checkticket.js">
+        // 示例数据，实际由后端或本地存储获取,购票信息字典列表
+        // const tickets = [
+        //     { username: '张三', seat: '1排5号' },
+        //     { username: '李四', seat: '2排8号' },
+        //     { username: '王五', seat: '3排2号' },
+        //     { username: '赵六', seat: '4排3号' },
+        //     { username: '刘七', seat: '12排23号' }
+        // ];
+        // const selectedDiv = document.getElementById('selected');
+        // selectedDiv.innerHTML = '';
+        // // 遍历购票信息字典列表,生成票据信息框,遵循统一id命名规则
+        // tickets.forEach((item, i) => {
+        //     const ticketDiv = document.createElement('div');
+        //     ticketDiv.className = 'ticket';
+        //     ticketDiv.id = `ticket_${i}`;
+        //     const usernameDiv = document.createElement('div');
+        //     usernameDiv.className = 'username';
+        //     usernameDiv.id = `username_${i}`;
+        //     usernameDiv.textContent = `姓名：${item.username}`;
+        //     const seatDiv = document.createElement('div');
+        //     seatDiv.className = 'seat';
+        //     seatDiv.id = `seat_${i}`;
+        //     seatDiv.textContent = `座位：${item.seat}`;
+        //     ticketDiv.appendChild(usernameDiv);
+        //     ticketDiv.appendChild(seatDiv);
+        //     selectedDiv.appendChild(ticketDiv);
+        // });
+    </script>
+</body>
+
+</html>
