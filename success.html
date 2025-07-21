@@ -15,14 +15,16 @@
         #success-container {
             width: 600px;
             min-height: 320px;
-            background: rgba(255,255,255,0.85);
-            border: 2px solid #b6eab6;
+            background: rgba(40, 60, 120, 0.13);
+            border: 2px solid #222;
             border-radius: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.18);
+            backdrop-filter: blur(14px) saturate(160%);
+            -webkit-backdrop-filter: blur(14px) saturate(160%);
             padding: 48px 0 48px 0;
         }
         .success-content {
@@ -38,7 +40,7 @@
         }
         #success-message {
             font-size: 1.7rem;
-            color: #222;
+            color: #fff;
             line-height: 2.5rem;
             text-align: center;
             min-width: 320px;
@@ -46,15 +48,16 @@
             word-break: break-all;
             margin-bottom: 32px;
         }
+        /* 确保按钮使用统一样式，无需额外class，直接继承全局button样式 */
         #ok-btn {
             width: 220px;
             height: 56px;
             border-radius: 16px;
-            background: #ffd600;
+            background: rgba(0, 180, 255, 0.48);
             color: #fff;
             font-size: 1.5rem;
             font-weight: bold;
-            border: none;
+            border: 1px solid rgba(0, 180, 255, 0.28);
             cursor: pointer;
             margin-top: 0;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
@@ -64,6 +67,29 @@
             background: #ffe066;
             color: #222;
             transform: translateY(-2px) scale(1.04);
+        }
+        button, input[type="button"], input[type="submit"] {
+            border: none;
+            outline: none;
+            border-radius: 16px;
+            font-size: 16px;
+            color: #fff;
+            background: rgba(40, 60, 120, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            transition: all 0.3s;
+            cursor: pointer;
+            padding: 10px 24px;
+        }
+        button:hover, input[type="button"]:hover, input[type="submit"]:hover {
+            box-shadow: 0 12px 32px rgba(31,38,135,0.25);
+            background: rgba(40, 60, 120, 0.28);
+            color: #fff;
+        }
+        button:active, input[type="button"]:active, input[type="submit"]:active {
+            box-shadow: 0 6px 16px rgba(31,38,135,0.18);
+            background: rgba(40, 60, 120, 0.22);
         }
         @media (max-width: 1000px) {
             #success-container { width: 98vw; min-width: 0; }
@@ -89,18 +115,18 @@
         </div>
         <button id="ok-btn">OK</button>
     </div>
-    <script>
+    <script src="success.js">
         // 可通过localStorage、URL参数等方式传递消息
         // 可以在跳转前设置 localStorage.setItem('successMsg', '支付成功！');
         // 根据操作类型,设置不同的成功消息
-        let msg = localStorage.getItem('successMsg');
-        if (!msg) {
-            msg = '未知信息';
-        }
-        document.getElementById('success-message').innerHTML = msg;
-        document.getElementById('ok-btn').onclick = function () {
-            window.history.back();
-        };
+        // let msg = localStorage.getItem('successMsg');
+        // if (!msg) {
+        //     msg = '未知信息';
+        // }
+        // document.getElementById('success-message').innerHTML = msg;
+        // document.getElementById('ok-btn').onclick = function () {
+        //     window.history.back();
+        // };
     </script>
 </body>
 

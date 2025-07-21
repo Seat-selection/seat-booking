@@ -51,6 +51,7 @@
         font-family: 'SimSun', 'Songti SC', 'Microsoft YaHei', sans-serif;
         font-size: 18px;
         text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+        color: #fff;
     }
     body {
         background-image: url('background.avif');  
@@ -66,16 +67,15 @@
         justify-content: center;
         height: 450px;
         width: 600px;
-        background-color: rgba(255, 255, 255, 0.8);
-
-        border: 2px solid #ffffff; 
-        border-radius: 8px;       
-
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 
-                    0 0 0 1px rgba(0, 0, 0, 0.1);     
-        justify-content: center; 
-        align-items: center; 
-        gap: 25px;          
+        background: rgba(40, 60, 120, 0.10); /* 更透明的液态毛玻璃 */
+        border-radius: 24px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+        backdrop-filter: blur(8px) saturate(120%);
+        -webkit-backdrop-filter: blur(8px) saturate(120%);
+        border: 1px solid rgba(255,255,255,0.18);
+        align-items: center;
+        gap: 25px;
+        overflow: hidden;
     }
     
     .form-group {
@@ -93,6 +93,13 @@
     #name, #age {
         font-family: 'SimSun', 'Songti SC', 'Microsoft YaHei', sans-serif;
         font-size: 18px;
+        color: #000;
+        background: rgba(255,255,255,0.38);
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        backdrop-filter: blur(8px) saturate(180%);
+        -webkit-backdrop-filter: blur(8px) saturate(180%);
     }
 
     
@@ -102,7 +109,7 @@
         margin-bottom: 5px;
         font-family: 'SimSun', 'Songti SC', 'Microsoft YaHei', sans-serif; 
         font-weight: 1000;
-        color: #000000;
+        color: #fff;
         background-color: inherit;
         height: 40px;
         width: 80px;
@@ -110,14 +117,25 @@
     }
     input[type="text"],
     input[type="password"] {
-        /* vertical-align: top; */
-        /* display: inline-block; */
         width: 250px;
         height: 60px;
         padding: 10px;
         border: 1px solid #ddd;
-        border-radius: 4px;
+        border-radius: 8px;
         box-sizing: border-box;
+        color: #000 !important;
+        opacity: 1 !important;
+        background: rgba(255,255,255,0.38);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        backdrop-filter: blur(8px) saturate(180%);
+        -webkit-backdrop-filter: blur(8px) saturate(180%);
+        position: relative;
+        z-index: 2;
+    }
+    input[type="text"]::placeholder,
+    input[type="password"]::placeholder {
+        color: #222 !important;
+        opacity: 0.7 !important;
     }
     #adding {
         display: flex;
@@ -125,66 +143,65 @@
         align-items: center; 
     }
     #adding-button, #return-button {
-        border: none; 
+        border: none;
         outline: none;
         position: relative;
         height: 60px;
         width: 180px;
-        border-radius: 8px;
+        border-radius: 12px;
         font-size: 16px;
-        background-color: rgba(13, 38, 84, 0.3);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
+        color: #fff;
+        background: rgba(40, 60, 120, 0.18);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        transition: all 0.3s;
         cursor: pointer;
+        overflow: hidden;
+    }
+    #adding-button::before, #return-button::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to right, 
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: rotate(30deg);
+        animation: liquidFlow 4s infinite linear;
+        z-index: 1;
+        pointer-events: none;
     }
     #adding-button:hover, #return-button:hover {
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(31,38,135,0.25);
+        background: rgba(255,255,255,0.28);
+        color: #222;
     }
     #adding-button:active, #return-button:active {
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        transform: translateY(1px);
+        box-shadow: 0 6px 16px rgba(31,38,135,0.18);
+        background: rgba(255,255,255,0.22);
+    }
+    #adding-button *, #return-button * {
+        position: relative;
+        z-index: 2;
+    }
+    @keyframes liquidFlow {
+        0% { left: -50%; }
+        100% { left: 150%; }
     }
     #adding-button {
-        background-color: rgba(255, 215, 0, 0.8);
+        background: rgba(0, 180, 255, 0.48);
+        color: #fff;
+        border: 1px solid rgba(0, 180, 255, 0.28);
     }
-    #adding-button:hover {
-        background-color: rgba(255, 193, 7, 0.9);
-    }
-    #adding-button:active {
-        background-color: rgba(255, 160, 0, 1.0);
-    }
-
     #return-button {
-        background-color: rgba(169, 169, 169, 0.8); 
+        background: rgba(255, 140, 0, 0.48);
+        color: #fff;
+        border: 1px solid rgba(255, 140, 0, 0.28);
     }
-    #return-button:hover {
-        background-color: rgba(140, 140, 140, 0.9);
-    }
-    #return-button:active {
-        background-color: rgba(110, 110, 110, 1.0); 
-    }
-    /* #adding-viewer::before, #name::before, #age::before, #adding::before, #adding-button::before {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        font-size: 12px;
-        color: #000000;
-        font-family: monospace;
-    }
-    #adding-viewer::before {
-        content: "添加观影人模块 id=\"adding-viewer\"";
-    }
-    #name::before {
-        content: "填写姓名 id=\"name\"";
-    }
-    #age::before {
-        content: "填写年龄 id=\"age\"";
-    }
-    #adding::before {
-        content: "id=\"adding\"";
-    }
-    #adding-button::before {
-        content: "添加按钮 id=\"adding-button\"";
-    } */
 </style>

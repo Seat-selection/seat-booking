@@ -1,58 +1,253 @@
 <!DOCTYPE html>
-
+<html lang="zh-CN">
 <head>
-    <meta charset="utf-8">
-    <title>电影院选票</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>座位预订系统 - 开始页面</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 移除body的背景样式，统一用全局 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            /* background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('background.avif'); */
+            /* background-size: cover; */
+            /* background-position: center; */
+            /* background-repeat: no-repeat; */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 0 20px;
+            z-index: 2;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .options-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .option:hover {
+            transform: scale(1.05);
+        }
+
+        .option-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .option-button {
+            padding: 12px 24px;
+            border-radius: 16px; /* 统一为16px圆角 */
+            font-size: 1rem;
+            font-weight: 600; /* 加粗字体 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px; /* 统一宽度 */
+            border: none;
+            outline: none;
+            position: relative; /* 新增：为伪元素定位 */
+            overflow: hidden; /* 新增：隐藏溢出内容 */
+            /* 液态毛玻璃核心效果 */
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        /* 新增：液态流动效果 */
+        .option-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: liquidFlow 6s infinite linear;
+        }
+
+        /* 新增：流动动画 */
+        @keyframes liquidFlow {
+            0% {
+                left: -50%;
+            }
+            100% {
+                left: 150%;
+            }
+        }
+
+        /* 统一按钮交互效果 */
+        .option-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5), 
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px) saturate(200%);
+            -webkit-backdrop-filter: blur(15px) saturate(200%);
+        }
+
+        .option-button:active {
+            transform: translateY(1px);
+        }
+        /* 删除差异化样式 */
+        /*
+        .option-button.individual {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .option-button.individual:hover {
+            background-color: #f0f0f0;
+        }
+
+        .option-button.team {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .option-button.team:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        */
+
+        .option.selected .option-button.individual {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .option.selected .option-button.team {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        /* 背景海报效果 */
+        .background-posters {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        .poster {
+            position: absolute;
+            width: 80px;
+            height: 120px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+            border-radius: 4px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* .poster:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .poster:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
+        .poster:nth-child(3) { top: 60%; left: 15%; animation-delay: 2s; }
+        .poster:nth-child(4) { top: 70%; right: 20%; animation-delay: 3s; }
+        .poster:nth-child(5) { top: 40%; left: 80%; animation-delay: 4s; }
+        .poster:nth-child(6) { top: 80%; left: 70%; animation-delay: 5s; } */
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .options-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .option {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
 </head>
+<body class="index-bg">
+    <!-- 背景海报效果
+    <div class="background-posters">
+        <div class="poster"></div>
+        <div class="poster"></div>
+        <div class="poster"></div>
+        <div class="poster"></div>
+        <div class="poster"></div>
+        <div class="poster"></div>
+    </div> -->
 
-<body>
-    <div id="ticket-count">
-        <!-- id="ticket-count" -->
-        <div id="individual"></div>
-        <div id="group"></div>
+    <div class="container glass">
+        <h1 class="main-title">影院在线购票服务</h1>
+        <p class="subtitle">请开启您的观影之旅!</p>
+        
+        <div class="options-container">
+            <div class="option" >
+                <div class="option-icon"><img src="./icons/individual.png" alt="个人" width="60" height="60"></div>
+                <button class="option-button individual" id="individual" onclick="selectOption('individual')" >个人</button>
+            </div>
+            
+            <div class="option" >   
+                <div class="option-icon"><img src="./icons/group.png" alt="团体" width="60" height="60"></div>
+                <button class="option-button team" id="group" onclick="selectOption('group')">团体</button>
+            </div>
+        </div>
     </div>
-    <script src="./index.js"></script>
+<script src="index.js"> </script>
 </body>
-
-<style>
-    body {
-        display: flex;
-        height: 100vh;
-        justify-content: center;
-        align-items: center;
-    }
-    #ticket-count {
-        position: relative;
-        display: flex;
-        height: 200px;
-        width: 600px;
-        background-color: rgba(37, 12, 147, 0.3);;
-        justify-content: center; 
-        align-items: center; 
-        gap: 40px;          
-    }
-    
-    #individual, #group {
-        position: relative;
-        height: 60px;
-        width: 120px;
-        background-color: rgba(179, 238, 16, 0.3);;
-    }
-    #ticket-count::before, #individual::before, #group::before {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        font-size: 12px;
-        color: #000000;
-        font-family: monospace;
-    }
-    #ticket-count::before {
-        content: "购票人数选择模块 id=\"ticket-count\"";
-    }
-    #individual::before {
-        content: "个人购票按钮 id=\"individual\"";
-    }
-    #group::before {
-        content: "团体购票按钮 id=\"group\"";
-    }
-</style>
+</html>

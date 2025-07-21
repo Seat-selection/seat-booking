@@ -8,18 +8,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeSession() {
-    // 清除之前的数据
+    // 保留现有配置中的已购票和已预订信息
+    const existingConfig = JSON.parse(sessionStorage.getItem('cinemaConfig') || '{}');
     sessionStorage.clear();
-    
-    // 初始化基本配置
+    // 初始化新配置时继承已购座位和已预订座位
     const config = {
-        ticketType: '', // 'individual' 或 'group'
-        viewers: [], // 观影人列表
-        selectedSeats: [], // 已选座位
-        reservedSeats: [], // 预订座位
-        purchasedSeats: [], // 已购买座位
-        totalRows: 10, //后续看在哪里传入这个参数
-        totalCols: 20 //后续看在哪里传入这个参数
+        ticketType: '',
+        viewers: [],
+        selectedSeats: [],//已选座位
+        reservedSeats: existingConfig.reservedSeats || [],//已预订座位
+        purchasedSeats: existingConfig.purchasedSeats || [],//已购座位
+        totalRows: 10,
+        totalCols: 20
     };
     
     sessionStorage.setItem('cinemaConfig', JSON.stringify(config));

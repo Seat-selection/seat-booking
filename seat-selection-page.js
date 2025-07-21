@@ -25,10 +25,12 @@ function TestMode() {
     // 标记为已执行
     
     
-    alert('测试中');
+    // alert('测试中');
     initializeSession();
     sessionStorage.setItem('hasInitialized', 'true');
 }
+
+
 let ctrlClickIndex = 0;
 let config;
 let selectedViewer = null; // 当前选中的观影人
@@ -438,7 +440,8 @@ function finishSelection() {
     }));
     
     saveConfig();
-    window.location.href = 'payment.html';
+    // window.location.href = 'payment.html';
+    window.location.href = 'checkticket.html';
 }
 
 // 渲染观影人列表
@@ -487,7 +490,8 @@ function renderViewerList() {
 // 获取座位颜色（用于Canvas绘制）
 function getSeatColor(row, col) {
     const seatKey = `${row}-${col}`;
-    return seatStates[seatKey] || 'green';
+    const color = seatStates[seatKey] || 'green';
+    return (color === 'green') ? '#228B22' : color;
 }
 
 // 保存配置到sessionStorage
@@ -507,22 +511,30 @@ window.addEventListener('load', function() {
         }
     }, 100);
 });
-
+//点击跳转
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('check-button').onclick = function() {
+        window.location.href = 'ticketinfo.html';
+    };
+});
 
 function initializeSession() {
+    //注释掉，采用index.js中传入的数据
+
+
     // 清除之前的数据
-    sessionStorage.clear();
+    // sessionStorage.clear();
     
-    // 初始化基本配置
-    const config = {
-        ticketType: 'group', // 'individual' 或 'group'
-        viewers: [], // 观影人列表
-        selectedSeats: [], // 已选座位
-        reservedSeats: [], // 预订座位
-        purchasedSeats: [], // 已购买座位
-        totalRows: 10, //后续看在哪里传入这个参数
-        totalCols: 20 //后续看在哪里传入这个参数
-    };
+    // // 初始化基本配置
+    // const config = {
+    //     ticketType: 'group', // 'individual' 或 'group'
+    //     viewers: [], // 观影人列表
+    //     selectedSeats: [], // 已选座位
+    //     reservedSeats: [], // 预订座位
+    //     purchasedSeats: [], // 已购买座位
+    //     totalRows: 10, //后续看在哪里传入这个参数
+    //     totalCols: 20 //后续看在哪里传入这个参数
+    // };
     
-    sessionStorage.setItem('cinemaConfig', JSON.stringify(config));
+    // sessionStorage.setItem('cinemaConfig', JSON.stringify(config));
 }
