@@ -1,4 +1,6 @@
 const audiences = document.querySelectorAll('.audience');
+const viewersNumber = sessionStorage.getItem('selectedNumber');
+console.log(viewersNumber);
 audiences.forEach(audience => {
     audience.addEventListener('click', function () {
         if (this.classList.contains('selected')) {
@@ -23,9 +25,6 @@ function TestMode() {
     }
     
     // 标记为已执行
-    
-    
-    // alert('测试中');
     initializeSession();
     sessionStorage.setItem('hasInitialized', 'true');
 }
@@ -71,6 +70,9 @@ function initializeSeatStates() {
     config.purchasedSeats.forEach(seat => {
         seatStates[`${seat.row}-${seat.col}`] = 'red';
     });
+    config.viewers.forEach((viewer, index) => {
+        seatStates[`${viewer.seatRow}-${viewer.seatCol}`] = 'yellow';
+    });
 }
 
 function bindEvents() {
@@ -101,6 +103,10 @@ function bindEvents() {
                 alert('当前是个人选票，只能添加一个观影人！');
                 return;
             }
+            if(config.viewers.length >= viewersNumber) {
+                alert(`已添加${viewersNumber}人，请开始选座！`);
+                return;
+            }
             // 没有限制就跳转
             window.location.href = 'adding-viewer.html';
         });
@@ -124,100 +130,107 @@ function handleSeatSelection(row, col, ctrlKey) {
     console.log("选择座位:", row, col);
     
     const seatKey = `${row}-${col}`;
-    const currentState = seatStates[seatKey];
-    if(ctrlKey){
+    let currentState = seatStates[seatKey];
+    if(ctrlKey) {
         // CTRL模式：按点击顺序分配给观影人
-    if (config.viewers.length === 0) {
-        alert('请先添加观影人！');
-        return;
-    }
+        if (config.viewers.length === 0) {
+            alert('请先添加观影人！');
+            return;
+        }
 
-    
-    // 只要是不完全选择就置零
-    if (ctrlClickIndex ===0||lastSelectionType==='single') {
-        config.viewers.forEach(viewer => {
-            if (viewer.seatRow !== null && viewer.seatCol !== null) {
-                const oldKey = `${viewer.seatRow}-${viewer.seatCol}`;
-                seatStates[oldKey] = 'green';
-                changeSeatState(viewer.seatRow, viewer.seatCol, 'green');
-                viewer.seatRow = null;
-                viewer.seatCol = null;
-            }
-        });
-    }
-    
-
-    
-    const currentViewer = config.viewers[ctrlClickIndex];
-    
-    // 检查年龄限制
-    if (!checkAgeRestriction(currentViewer, row)) {
-        return; // 不增加索引，让用户重新选择
-    }
-    
-    // 分配座位给当前观影人
-    currentViewer.seatRow = row;
-    currentViewer.seatCol = col;
-    seatStates[seatKey] = 'yellow';
-    changeSeatState(row, col, 'yellow');
-    
-    // 移动到下一个观影人
-    ctrlClickIndex++;
-    
-    
-    lastSelectionType='ctrl'
-    saveConfig();
-    renderViewerList();
-    // 提示当前进度
-    if (ctrlClickIndex < config.viewers.length) {
-        console.log(`已为 ${currentViewer.name} 分配座位，请为 ${config.viewers[ctrlClickIndex].name} 选择座位`);
-    } else {
-        alert('所有观影人座位分配完成！');
-        ctrlClickIndex = 0; // 重置索引
-    }
-    }
-    else{
-    // 如果座位已被占用，不能选择
-    if (currentState === 'red') {
-        alert('该座位已被占用！');
-        return;
-    }
-    
-    // 如果没有选中观影人，提示用户
-    if (!selectedViewer) {
-        alert('请先选择一个观影人！');
-        return;
-    }
-    
-    // 检查年龄限制
-    if (!checkAgeRestriction(selectedViewer, row)) {
-        return;
-    }
-    
-    // 如果座位已被当前观影人选中，取消选择
-    if (selectedViewer.seatRow === row && selectedViewer.seatCol === col) {
-        selectedViewer.seatRow = null;
-        selectedViewer.seatCol = null;
-        seatStates[seatKey] = 'green';
-        changeSeatState(row, col, 'green');
-    } else {
-        // 如果观影人之前选了其他座位，先清除
-        if (selectedViewer.seatRow !== null && selectedViewer.seatCol !== null) {
-            const oldKey = `${selectedViewer.seatRow}-${selectedViewer.seatCol}`;
-            seatStates[oldKey] = 'green';
-            changeSeatState(selectedViewer.seatRow, selectedViewer.seatCol, 'green');
+        
+        // 只要是不完全选择就置零
+        if (ctrlClickIndex === 0||lastSelectionType==='single') {
+            config.viewers.forEach(viewer => {
+                if (viewer.seatRow !== null && viewer.seatCol !== null) {
+                    const oldKey = `${viewer.seatRow}-${viewer.seatCol}`;
+                    seatStates[oldKey] = 'green';
+                    changeSeatState(viewer.seatRow, viewer.seatCol, 'green');
+                    viewer.seatRow = null;
+                    viewer.seatCol = null;
+                }
+            });
+            currentState = "green";
         }
         
-        // 选择新座位
-        selectedViewer.seatRow = row;
-        selectedViewer.seatCol = col;
+
+        
+        const currentViewer = config.viewers[ctrlClickIndex];
+        
+        // 检查年龄限制
+        if (!checkAgeRestriction(currentViewer, row)) {
+            return; // 不增加索引，让用户重新选择
+        }
+
+        // 如果座位已被占用，不能选择
+        if (currentState === 'red' || currentState === 'yellow') {
+            alert('该座位已被占用！');
+            return;
+        }
+        
+        // 分配座位给当前观影人
+        currentViewer.seatRow = row;
+        currentViewer.seatCol = col;
         seatStates[seatKey] = 'yellow';
         changeSeatState(row, col, 'yellow');
+        
+        // 移动到下一个观影人
+        ctrlClickIndex++;
+        
+        
+        lastSelectionType='ctrl';
+        saveConfig();
+        renderViewerList();
+        // 提示当前进度
+        if (ctrlClickIndex < config.viewers.length) {
+            console.log(`已为 ${currentViewer.name} 分配座位，请为 ${config.viewers[ctrlClickIndex].name} 选择座位`);
+        } else {
+            alert('所有观影人座位分配完成！');
+            ctrlClickIndex = 0; // 重置索引
+        }
     }
-    lastSelectionType='single'
-    saveConfig();
-    renderViewerList();
-}
+    else {
+        // 如果座位已被占用，不能选择
+        if (currentState === 'red' || currentState === 'yellow') {
+            alert('该座位已被占用！');
+            return;
+        }
+        
+        // 如果没有选中观影人，提示用户
+        if (!selectedViewer) {
+            alert('请先选择一个观影人！');
+            return;
+        }
+        
+        // 检查年龄限制
+        if (!checkAgeRestriction(selectedViewer, row)) {
+            return;
+        }
+        
+        // 如果座位已被当前观影人选中，取消选择
+        if (selectedViewer.seatRow === row && selectedViewer.seatCol === col) {
+            selectedViewer.seatRow = null;
+            selectedViewer.seatCol = null;
+            seatStates[seatKey] = 'green';
+            changeSeatState(row, col, 'green');
+        } else {
+            // 如果观影人之前选了其他座位，先清除
+            if (selectedViewer.seatRow !== null && selectedViewer.seatCol !== null) {
+                const oldKey = `${selectedViewer.seatRow}-${selectedViewer.seatCol}`;
+                seatStates[oldKey] = 'green';
+                changeSeatState(selectedViewer.seatRow, selectedViewer.seatCol, 'green');
+            }
+            
+            // 选择新座位
+            selectedViewer.seatRow = row;
+            selectedViewer.seatCol = col;
+            seatStates[seatKey] = 'yellow';
+            changeSeatState(row, col, 'yellow');
+        }
+        lastSelectionType='single'
+        saveConfig();
+        renderViewerList();
+    }
 }
 
 // 检查年龄限制
@@ -426,9 +439,15 @@ function finishSelection() {
         alert(`以下观影人尚未选座：${names}`);
         return;
     }
+
     
     if (config.viewers.length === 0) {
         alert('请先添加观影人！');
+        return;
+    }
+
+    if (config.viewers.length < viewersNumber) {
+        alert(`您购买了${viewersNumber}个人的团体票，请添加所有观影人！`);
         return;
     }
     
@@ -440,7 +459,6 @@ function finishSelection() {
     }));
     
     saveConfig();
-    // window.location.href = 'payment.html';
     window.location.href = 'checkticket.html';
 }
 

@@ -4,13 +4,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // 数据源处理（含空值保护）
     const paidTickets = (config.purchasedSeats || []).map(seat => ({
         name: seat?.viewer?.name || '未命名',
-        seat: `${seat?.row ?? 0}排${seat?.col ?? 0}号`,
+        seat: `${seat?.row + 1 ?? 0 }排${seat?.col + 1 ?? 0}号`,
         age: seat?.viewer?.age || ''
     }));
 
     const reservedTickets = (config.reservedSeats || []).map(seat => ({
         name: seat?.viewer?.name || '未命名',
-        seat: `${seat?.row ?? 0}排${seat?.col ?? 0}号`,
+        seat: `${seat?.row + 1 ?? 0}排${seat?.col + 1 ?? 0}号`,
         age: seat?.viewer?.age || ''
     }));
 
@@ -110,3 +110,10 @@ function createTicketElement(item, prefix, index) {
     return ticketDiv;
 }
 
+const returnBtn = document.getElementById('return');
+    if (returnBtn) {
+        returnBtn.addEventListener('click', function(){
+            
+            window.location.href = 'seat-selection-page.html';
+        })
+    }

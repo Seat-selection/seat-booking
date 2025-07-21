@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>座位选择</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="button.css">
 </head>
 
 <body>
@@ -18,20 +19,19 @@
             const ctx = canvas.getContext('2d');
             const centerX = canvas.width / 2;
             const centerY = canvas.height - 100;
-            // console.log(centerX, centerY);
             
-            // console.log(canvas.width, canvas.height)
+            const storedConfig = sessionStorage.getItem('allConfig');
+            let allConfig;
+            let property = sessionStorage.getItem('Property');
+            console.log(property);
+            if (storedConfig) {
+                allConfig = JSON.parse(storedConfig);
+            } else {
+                alert("页面错误！")
+            }
             
-            
-            
-            const cinemaConfig = {
-                small: { rows: 5, cols: 20, baseRadius: 300, rowSpacing: 40 },
-                medium: { rows: 10, cols: 20, baseRadius: 200, rowSpacing: 35 },
-                large: { rows: 10, cols: 30, baseRadius: 255, rowSpacing: 30 }
-            };
-
             // 当前使用的配置
-            let currentConfig = cinemaConfig.medium;
+            let currentConfig = allConfig[property];
             let rowSpacing = currentConfig.rowSpacing;
             let ROWS = currentConfig.rows;
             let COLS = currentConfig.cols;
@@ -82,6 +82,21 @@
                     ctx.fillText((i + 1).toString(), x, y);
                 }
             }
+            function add_annotation(x, y, state, annotation) {
+                console.log(x, y, state, annotation);
+                // 绘制圆形座位
+                ctx.beginPath();
+                ctx.arc(x, y, seatRadius, 0, Math.PI * 2);
+                ctx.fillStyle = state;
+                ctx.fill();
+
+                // 添加文字注释
+                ctx.fillStyle = "black"; // 文字颜色
+                ctx.font = "16px Arial"; // 文字大小和字体
+                ctx.textAlign = "left";  // 文本对齐方式（左对齐）
+                ctx.textBaseline = "middle"; // 垂直对齐方式（居中）
+                ctx.fillText(annotation, x + seatRadius + 10, y + 1); // 在圆形右侧10px处添加文字
+            }
             // 绘图
             function render() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -91,8 +106,7 @@
                 // ctx.fillStyle = 'red';
                 // ctx.fill();
                 // 设置字体样式
-                // 第一行文字：银屏中央（大字体、金色描边）
-                // --- 简洁美化“银屏中央” ---
+
                 ctx.save();
                 ctx.font = 'bold 44px "Microsoft YaHei", "PingFang SC", Arial, sans-serif';
                 ctx.textAlign = 'center';
@@ -103,8 +117,6 @@
                 ctx.fillText('银屏中央', canvas.width / 2, canvas.height - 120);
                 ctx.restore();
 
-                // 第二行文字：请点击座位选座（小字体、蓝色填充）
-                // --- 简洁美化“请点击座位选座” ---
                 ctx.save();
                 ctx.font = 'bold 24px "Microsoft YaHei", "PingFang SC", Arial, sans-serif';
                 ctx.textAlign = 'center';
@@ -114,6 +126,10 @@
                 ctx.shadowBlur = 6;
                 ctx.fillText('请点击座位选座', canvas.width / 2, canvas.height - 60);
                 ctx.restore();
+
+                add_annotation(canvas.width * 0.75, canvas.height - 130, "green", "空座");
+                add_annotation(canvas.width * 0.75, canvas.height - 105, "yellow", "选中未售座位");
+                add_annotation(canvas.width * 0.75, canvas.height - 80, "red", "已售座位");
 
                 for (var i = 0; i < ROWS; i++) {
                     for (var j = 0; j < COLS; j++) {
@@ -156,19 +172,19 @@
             })
         </script>
         <div id="option">
-            <button class="btn btn-secondary" id="auto">自动选座</button>
+            <button class="btn btn-secondary liquid-button" id="auto">自动选座</button>
         </div>
         <div id="check">
-            <button class="btn btn-primary" id="check-button">查看我的购票</button>
+            <button class="btn btn-primary liquid-button" id="check-button">查看我的购票</button>
         </div>
     </div>
     <div id="people" class="glass">
         <div id="addition">
-            <button id="addition-button">
+            <button id="addition-button" class="liquid-button">
                 添加观影人
             </button>
         </div>
-        <div>
+        <div style="font-weight: 600;">
             请点击已添加的观影人为其分配座位。
         </div>
         <div id="audience-list">
@@ -232,16 +248,15 @@
                     已选：X排X列
                 </p>
             </div>
-            <!-- 在这里编写观影人被选中的相关逻辑 -->
             
         </div>
         <div id="delete">
-            <button id="delete-button">
+            <button id="delete-button" class="liquid-button">
                 删除观影人
             </button>
         </div>
         <div id="done">
-            <button id="done-button">
+            <button id="done-button" class="liquid-button">
                 我选好了！
             </button>
         </div>
@@ -314,59 +329,7 @@
         width: 700px;
         /* background-color: rgba(16, 200, 65, 0.3); */
     }
-    #auto, #check-button, #addition-button, #done-button, #delete-button {
-        border: none; 
-        outline: none;
-        position: relative;
-        height: 60px;
-        width: 180px;
-        border-radius: 16px; /* 使用与首页一致的圆角 */
-        font-size: 16px;
-        font-weight: 600; /* 加粗字体提高清晰度 */
-        cursor: pointer;
-        transition: all 0.3s ease;
-        overflow: hidden;
-        /* 液态毛玻璃效果 */
-        background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(12px) saturate(180%);
-        -webkit-backdrop-filter: blur(12px) saturate(180%);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 
-                    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #ffffff;
-    }
-
-    /* 统一按钮动态效果 */
-    #auto:hover, #check-button:hover, #addition-button:hover, #done-button:hover, #delete-button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5), 
-                    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(15px) saturate(200%);
-        -webkit-backdrop-filter: blur(15px) saturate(200%);
-    }
-
-    #auto:active, #check-button:active, #addition-button:active, #done-button:active, #delete-button:active {
-        transform: translateY(1px);
-    }
-
-    /* 液态流动效果 - 统一应用到所有按钮 */
-    #auto::before, #check-button::before, #addition-button::before, #done-button::before, #delete-button::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(
-            to right, 
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.2) 50%,
-            rgba(255, 255, 255, 0) 100%
-        );
-        transform: rotate(30deg);
-        animation: liquidFlow 4s infinite linear;
-        z-index: 1;
-    }
+    
 
     /* 观影人卡片样式优化（唯一深蓝色毛玻璃版本） */
     .audience {
@@ -454,50 +417,28 @@
         color: #000000;
         font-family: monospace;
     }
-    /* #seat-selection::before {
-        content: "选座模块 id=\"seat-selection\"";
+    #auto {
+        background: rgba(247, 226, 3, 0.48) !important;
+        color: #fff;
+        padding-left: 32px;
     }
-    #people::before {
-        content: "购票人 id=\"people\"";
+    #check-button {
+        background: rgba(3, 247, 239, 0.48) !important;
+        color: #fff;
+        padding-left: 32px;
     }
-    #seat-map::before {
-        content: "座位图 id=\"seat-map\"";
+    #delete-button {
+        background: rgba(229, 4, 4, 0.48) !important;
+        color: #fff;
+        padding-left: 32px;
     }
-    #option::before {
-        content: "自动或手动选座选项 id=\"option\"";
-    } */
-    /* #manual::before {
-        content: "手动选座按钮 id=\"manual\"";
+    #addition-button {
+        background: rgba(223, 7, 215, 0.48) !important;
+        color: #fff;
+        padding-left: 32px;
     }
-    #auto::before {
-        content: "自动选座按钮 id=\"auto\"";
-    } */
-    /* #check::before {
-        content: "id=\"check\"";
-    } */
-    /* #check-button::before {
-        content: "查看我的购票按钮 id=\"check-button\"";
-    } */
-    /* #addition::before {
-        content: "id=\"addition\"";
-    }
-    #addition-button::before {
-        content: "添加观影人按钮 id=\"addition-button\"";
-    }
-    #audience-list::before {
-        content: "观影人列表 id=\"audience-list\"";
-    }
-    #audience::before {
-        content: "观影人 id=\"audience\"";
-    }
-    #done::before {
-        content: "id=\"done\"";
-    }
-    #done-button::before {
-        content: "\"我选好了\"按钮 id=\"done-button\"";
-    } */
     #done-button {
-        background: rgba(3, 52, 85, 0.92) !important;
+        background: rgba(3, 52, 85, 0.48) !important;
         color: #fff;
         padding-left: 32px;
     }

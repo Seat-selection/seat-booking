@@ -7,39 +7,35 @@
 </head>
 
 <body>
-    <form id="adding-viewer">
-        <!-- <div id="name">
+    <form id="parameter">
+        <!-- <div id="number">
         </div> -->
         <div style="font-weight: 600;">
-            添加观影人
+            选项
         </div>
         <div class="form-group">
-            <div for="username">
-                <span for="name-div">
-                    姓名：
+            <div for="number">
+                <span for="number-div">
+                    观影人数：
                 </span>
-                <input type="text" id="name" placeholder="请输入姓名">
+                <select id="number">
+                    <script>
+                        // 动态生成1-20的选项
+                        for (let i = 1; i <= 20; i++) {
+                            const option = document.createElement('option');
+                            option.value = i;
+                            option.textContent = i;
+                            document.getElementById('number').appendChild(option);
+                        }
+                    </script>
+                </select>
             </div>
         </div>
-        <div class="form-group">
-            <div for="age">
-                <span for="age-div">
-                    年龄：
-                </span>
-                <input type="text" id="age" placeholder="请输入年龄">
-            </div>
+        <div id="confirm">
+            <input type="submit" value="确定" id="confirm-button"  class="liquid-button">
         </div>
-        <div id="adding">
-            <!-- <button id="adding-button">
-                添加
-            </button> -->
-            <input type="submit" value="添加" id="adding-button"  class="liquid-button">
-        </div>
-        <button id="return-button" class="liquid-button">
-            返回
-        </button>
     </form>
-    <script src="./adding-viewer.js"></script>
+    <script src="./parameter.js"></script>
 </body>
     
 <style>
@@ -62,7 +58,7 @@
         background-repeat: no-repeat;       
         background-attachment: fixed;   
     }
-    #adding-viewer {
+    #parameter {
         position: relative;
         display: flex;
         flex-direction: column;
@@ -88,11 +84,11 @@
         height: 60px;
         width: 600px;
     }
-    div[for="username"], div[for="age"] {
+    div[for="number"], div[for="size"] {
         width: 360px;
     }
 
-    #name, #age {
+    #number {
         font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
         font-size: 18px;
         color: #000;
@@ -103,9 +99,8 @@
         backdrop-filter: blur(8px) saturate(180%);
         -webkit-backdrop-filter: blur(8px) saturate(180%);
     }
-
     
-    span[for="name-div"], span[for="age-div"] {
+    span[for="number-div"] {
         /* vertical-align: top; */
         /* display: inline-block; */
         margin-bottom: 5px;
@@ -117,36 +112,16 @@
         width: 80px;
         font-size: 18px;
     }
-    input[type="text"] {
-        width: 250px;
-        height: 60px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-sizing: border-box;
-        color: #FFFFFF !important;
-        opacity: 1 !important;
-        background: rgba(255,255,255,0.38);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        backdrop-filter: blur(8px) saturate(180%);
-        -webkit-backdrop-filter: blur(8px) saturate(180%);
-        position: relative;
-        z-index: 2;
-    }
-    input[type="text"]::placeholder {
-        color: #222 !important;
-        opacity: 0.7 !important;
-    }
-    #adding {
+    #confirm {
         display: flex;
         justify-content: center; 
         align-items: center; 
     }
-    #adding-button:active, #return-button:active {
+    #confirm-button:active, #return-button:active {
         box-shadow: 0 6px 16px rgba(31,38,135,0.18);
         background: rgba(255,255,255,0.22);
     }
-    #adding-button *, #return-button * {
+    #confirm-button *, #return-button * {
         position: relative;
         z-index: 2;
     } 
@@ -154,7 +129,7 @@
         0% { left: -50%; }
         100% { left: 150%; }
     }
-    #adding-button {
+    #confirm-button {
         background: rgba(0, 180, 255, 0.48);
         color: #fff;
         border: 1px solid rgba(0, 180, 255, 0.28);
