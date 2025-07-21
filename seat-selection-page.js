@@ -538,5 +538,3 @@ function initializeSession() {
     
     // sessionStorage.setItem('cinemaConfig', JSON.stringify(config));
 }
-
-
