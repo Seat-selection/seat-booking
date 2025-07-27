@@ -4,13 +4,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // 数据源处理（含空值保护）
     const paidTickets = (config.purchasedSeats || []).map(seat => ({
         name: seat?.viewer?.name || '未命名',
-        seat: `${seat?.row ?? 0}排${seat?.col ?? 0}号`,
+        seat: `${seat?.row + 1 ?? 0 }排${seat?.col + 1 ?? 0}号`,
         age: seat?.viewer?.age || ''
     }));
 
     const reservedTickets = (config.reservedSeats || []).map(seat => ({
         name: seat?.viewer?.name || '未命名',
-        seat: `${seat?.row ?? 0}排${seat?.col ?? 0}号`,
+        seat: `${seat?.row + 1 ?? 0}排${seat?.col + 1 ?? 0}号`,
         age: seat?.viewer?.age || ''
     }));
 
@@ -69,6 +69,42 @@ document.addEventListener('DOMContentLoaded', function() {
         sessionStorage.setItem('successType', 'refund');   
         window.location.href = 'success.html';
     };
+
+    // 支付按钮逻辑（修复后）
+    document.getElementById('pay').onclick = function () {
+        // 1. 获取选中的预订项索引（与其他功能保持变量名一致）
+        const selected = Array.from(document.querySelectorAll('[id^="reserved_select_"]:checked'))
+        .map(checkbox => parseInt(checkbox.id.split('_')[2]));
+
+        if (selected.length === 0) {
+            alert('请先选择要支付的预订票务');
+            return;
+        }
+
+        // 从预订列表中提取选中的项
+        const selectedItems = selected.map(index => (config.reservedSeats || [])[index]);
+
+        //更新预订列表：删除选中项
+        const updatedReservedSeats = (config.reservedSeats || []).filter(
+            (_, index) => !selected.includes(index)
+        );
+
+        //更新支付列表：合并原有已支付项和新选中项
+        const updatedPurchasedSeats = [...(config.purchasedSeats || []), ...selectedItems];
+
+        //构建更新后的配置
+        const updatedConfig = {
+            ...config,
+            reservedSeats: updatedReservedSeats,
+            purchasedSeats: updatedPurchasedSeats
+        };
+
+        //存储并跳转
+        sessionStorage.setItem('cinemaConfig', JSON.stringify(updatedConfig));
+        sessionStorage.setItem('successType', 'pay');
+        window.location.href = 'success.html';
+    };
+
 });
 
 // 公共渲染函数
@@ -110,3 +146,10 @@ function createTicketElement(item, prefix, index) {
     return ticketDiv;
 }
 
+const returnBtn = document.getElementById('return');
+    if (returnBtn) {
+        returnBtn.addEventListener('click', function(){
+            
+            window.location.href = 'seat-selection-page.html';
+        })
+    }

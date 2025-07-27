@@ -177,7 +177,9 @@
 
         /* 恢复按钮尺寸和字号，仅保留毛玻璃视觉 */
         #cancel-reservation,
-        #refund {
+        #refund,
+        #return,
+        #pay {
             border: none;
             outline: none;
             border-radius: 16px;
@@ -199,7 +201,9 @@
             overflow: hidden;
         }
         #cancel-reservation::before,
-        #refund::before {
+        #refund::before,
+        #return::before,
+        #pay::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -218,7 +222,9 @@
             pointer-events: none;
         }
         #cancel-reservation:hover,
-        #refund:hover {
+        #refund:hover,
+        #return:hover,
+        #pay:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5),
                         inset 0 0 0 1px rgba(255, 255, 255, 0.2);
@@ -226,11 +232,15 @@
             -webkit-backdrop-filter: blur(15px) saturate(200%);
         }
         #cancel-reservation:active,
-        #refund:active {
+        #refund:active,
+        #return:active,
+        #pay:active {
             transform: translateY(1px);
         }
         #cancel-reservation *,
-        #refund * {
+        #refund *,
+        #return *,
+        #pay * {
             position: relative;
             z-index: 2;
         }
@@ -244,7 +254,16 @@
             color: #fff;
             border: 1px solid rgba(0, 180, 255, 0.48);
         }
-
+        #return {
+            background: rgba(12, 240, 65, 0.48) !important;
+            color: #fff;
+            border: 1px solid rgba(0, 180, 255, 0.48);
+        }
+        #pay {
+            background: rgba(255, 255, 255, 0.12) !important;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
         @media (max-width: 1200px) {
             .tickets-area {
                 grid-template-columns: repeat(2, 1fr);
@@ -291,6 +310,8 @@
         <div id="actions">
             <button id="cancel-reservation">取消预订</button>
             <button id="refund">退票</button>
+            <button id="return">返回</button>
+            <button id="pay">支付</button>
         </div>
     </div>
     <script src="ticketinfo.js">

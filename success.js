@@ -11,27 +11,22 @@ document.addEventListener('DOMContentLoaded', function() {
         msg = '取消预订成功！';
     } else if (successType === 'refund') {
         msg = '退票成功！';
+    } else if (successType === 'pay') {
+        msg = '支付成功！';
     }
 
-
     document.getElementById('success-message').textContent = msg;
-
-    // 清除状态标记
-    sessionStorage.removeItem('successType');
 });
 
 document.getElementById('ok-btn').onclick = function() {
     const successType = sessionStorage.getItem('successType');
+    console.log("successType", successType);
     if (['reserve', 'payment'].includes(successType)) {
         window.location.href = 'index.html';
-    } else if (['refund', 'cancel-reserve'].includes(successType)) {
+    } else if (['refund', 'cancel-reserve', 'pay'].includes(successType)) {
         window.location.href = 'ticketinfo.html';
     } else {
         window.location.href = 'index.html'; // 默认回首页
     }
     sessionStorage.removeItem('successType'); // 统一清理
-
-
-
-
 };
